@@ -1,0 +1,27 @@
+/*
+ * PFClib - Parallel File Compression library
+ *
+ * Copyright (C) 2013-2014 Advanced Institute for Computational Science, RIKEN.
+ * All rights reserved.
+ *
+ */
+
+/**
+ * @file   pfc_Version.h
+ * PFCバージョン情報のヘッダーファイル
+ */
+
+#ifndef _PFC_VERSION_H_
+#define _PFC_VERSION_H_
+
+/** PFCライブラリのバージョン */
+#define PFC_VERSION_NO  "@PACKAGE_VERSION@"
+
+/** PFCライブラリのリビジョン */
+#define PFC_REVISION    "@PFC_REVISION@"
+
+/** PFC POD圧縮形式バージョン */
+#define POD_COMPRESS_VERSION "@PFC_CMP_VERSION@"
+
+#endif /* _PFC_VERSION_H_ */
+

@@ -1,0 +1,21 @@
+PfcCompressCntl {
+
+  DomainDivision  = (1, 2, 1)
+
+  ItemCntl[@] {
+
+    InputDfiPath    = "vel.dfi"
+    OutputDirectoryPath = "field_data"
+
+    CompressFormat  = "pod"
+    CompressError   = 1.0
+
+    StartStep       = 0
+    EndStep         = 70
+
+    ProcFileSave    = "ON"
+    OptSave         = "OFF"
+
+  }
+
+}

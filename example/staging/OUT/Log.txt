@@ -1,0 +1,15 @@
+input proc file : proc_1x2x1.txt
+m_startStep     : 0
+m_endStep       : 70
+m_outPath       : OUT
+m_cntlPath       : pfc_cntl
+dfi_fname size  : 1
+dfi_fname       : IN_Cio/vel.dfi
+
+
+---- i=0  m_dfi_fname=IN_Cio/vel.dfi
+m_numStep           : 8
+m_startStep(update) : 0
+m_endStep  (update) : 70
+m_numParallel(time dir.) : 4
+####### normal end ######

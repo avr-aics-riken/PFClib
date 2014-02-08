@@ -1,0 +1,93 @@
+Domain {
+
+  GlobalOrigin        = (-5.000000e-01, -5.000000e-01, -5.000000e-01)
+  GlobalRegion        = (1.250000e-01, 1.250000e-01, 1.250000e-01)
+  GlobalVoxel         = (8, 8, 8)
+  GlobalDivision      = (2, 2, 2)
+  ActiveSubdomainFile = ""
+
+}
+
+MPI {
+
+  NumberOfRank   = 8
+  NumberOfGroup  = 1
+
+}
+
+Process {
+
+  Rank[@] {
+
+    ID        = 0
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (1, 1, 1)
+    TailIndex = (4, 4, 4)
+
+  }
+  Rank[@] {
+
+    ID        = 1
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (5, 1, 1)
+    TailIndex = (8, 4, 4)
+
+  }
+  Rank[@] {
+
+    ID        = 2
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (1, 5, 1)
+    TailIndex = (4, 8, 4)
+
+  }
+  Rank[@] {
+
+    ID        = 3
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (5, 5, 1)
+    TailIndex = (8, 8, 4)
+
+  }
+  Rank[@] {
+
+    ID        = 4
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (1, 1, 5)
+    TailIndex = (4, 4, 8)
+
+  }
+  Rank[@] {
+
+    ID        = 5
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (5, 1, 5)
+    TailIndex = (8, 4, 8)
+
+  }
+  Rank[@] {
+
+    ID        = 6
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (1, 5, 5)
+    TailIndex = (4, 8, 8)
+
+  }
+  Rank[@] {
+
+    ID        = 7
+    HostName  = ""
+    VoxelSize = (4, 4, 4)
+    HeadIndex = (5, 5, 5)
+    TailIndex = (8, 8, 8)
+
+  }
+
+}

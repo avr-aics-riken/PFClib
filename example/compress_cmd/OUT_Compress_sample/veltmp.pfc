@@ -1,0 +1,133 @@
+FileInfo {
+
+  DirectoryPath      = "field_data"
+  Prefix             = "veltmp"
+  FileFormat         = "pod"
+  GuideCell          = 0
+  DataType          = "Float64"
+  Endian             = "big"
+  ArrayShape         = "nijk"
+  Component          = 3
+
+}
+
+CompressInfo {
+
+  CompressFormat     = "pod"
+  CompressError      =  1.000
+  CalculatedLayer    = 1
+  Version            = "1.0.0"
+  StartStep          = 0
+  EndStep            = 30
+
+}
+
+FilePath {
+
+    DfiPath            = "IN_Cio/veltmp.dfi"
+    PfcProcess         = "proc.pfc"
+
+}
+
+UnitList {
+
+  Length {
+    Unit       = "NonDimensional"
+    Reference  = 1.000000e+00
+  }
+  Pressure {
+    Unit       = "NonDimensional"
+    Reference  = 0.000000e+00
+    Difference = 0.000000e+00
+  }
+  Velocity {
+    Unit       = "NonDimensional"
+    Reference  = 1.000000e+00
+  }
+
+}
+
+TimeSlice {
+
+  Slice[@] {
+    Step = 0
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+  Slice[@] {
+    Step = 10
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+  Slice[@] {
+    Step = 20
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+  Slice[@] {
+    Step = 30
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+}
+

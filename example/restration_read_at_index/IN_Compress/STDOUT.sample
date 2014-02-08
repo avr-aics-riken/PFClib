@@ -1,0 +1,19 @@
+##### Compression sample start #####
+##### Compression Init()  start #####
+  numRank     = 8
+  rankID      = 0
+  numStep     = 4
+  numParallel = 2
+  numRegion   = 4
+  domainDivision[3] = 2 2 1
+  compressError     = 1
+	[./IN_Cio/./hoge/vel_0000000000_id000000.sph] has read :	step=0  time=0.000000e+00 ]
+	[./IN_Cio/./hoge/vel_0000000000_id000004.sph] has read :	step=0  time=0.000000e+00 ]
+	[./IN_Cio/./hoge/vel_0000000010_id000000.sph] has read :	step=10  time=0.000000e+00 ]
+	[./IN_Cio/./hoge/vel_0000000010_id000004.sph] has read :	step=10  time=0.000000e+00 ]
+##### Compression WriteProcFile()  start #####
+##### Compression compress.WriteData()  start #####
+**** current_layer_no =0 Calculated CompressError(%) = 1.30587  ****
+**** Finished calclulation: UserInputError(%)=1 Over ****
+      Number Of CalculatedLayer = 1
+##### Compression sample end #####

@@ -1,0 +1,59 @@
+#
+# Makefile
+#
+
+SHELL = /bin/sh
+
+include ./Makefile_include.$(System)
+
+TARGET = compress_cmd.exe
+
+OBJS   = main.o
+
+
+PFC_DIR=../..
+PFC_LIB=-L$(PFC_DIR)/src -lPFC
+
+CIO_DIR=../../../../Library/CIOlib
+CIO_LIB=-L$(CIO_DIR)/lib -lCIO
+
+TEXT_PARSER_DIR=../../../../Library/TextParser
+TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lMPITP
+
+PM_DIR=../../../../Library/PMlib
+PM_LIB=-L$(PM_DIR)/lib -lPM
+
+#MPI_DIR=/usr/local/openmpi-1.6.5
+#MPI_LIB=-L$(MPI_DIR)/lib -lmpi_cxx
+MPI_LIB=
+
+#BLAS_LIB=-llapack -lblas -lgfortran
+BLAS_LIB= -SSL2
+
+INCS = -I$(PFC_DIR)/include -I$(CIO_DIR)/include -I$(TEXT_PARSER_DIR)/include -I$(PM_DIR)/include
+
+LIBS = $(MPI_LIB) $(PFC_LIB) $(CIO_LIB) $(TEXT_PARSER_LIB) $(PM_LIB) $(BLAS_LIB)
+
+############################################################
+# Rules
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS) $(HEADER)
+	$(LD) -o $@ $(OBJS) $(LDFLAGS) $(LIBS) > $@.list 2>&1
+
+asms: $(ASMS)
+objs: $(OBJS)
+
+clean:
+	-rm -f *.[os] *.mod *.lst *.list *~ STDIN.o* $(TARGET)
+
+############################################################
+.SUFFIXES:
+.SUFFIXES: .o .cpp
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< > $*.list 2>&1
+
+############################################################
+

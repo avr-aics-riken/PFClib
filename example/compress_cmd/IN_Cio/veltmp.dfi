@@ -1,0 +1,125 @@
+FileInfo {
+
+  DirectoryPath      = "hoge"
+  TimeSliceDirectory = "off"
+  Prefix             = "veltmp"
+  FileFormat         = "sph"
+  GuideCell          = 0
+  DataType           = "Float64"
+  Endian             = "big"
+  ArrayShape         = "nijk"
+  Component          = 3
+  Variable[@]{ name  = "u" }
+  Variable[@]{ name  = "v" }
+  Variable[@]{ name  = "w" }
+
+}
+
+FilePath {
+
+  Process = "proc.dfi"
+
+}
+
+UnitList {
+
+  Length {
+    Unit       = "NonDimensional"
+    Reference  = 1.000000e+00
+  }
+  Pressure {
+    Unit       = "NonDimensional"
+    Reference  = 0.000000e+00
+    Difference = 0.000000e+00
+  }
+  Velocity {
+    Unit       = "NonDimensional"
+    Reference  = 1.000000e+00
+  }
+
+}
+
+TimeSlice {
+
+  Slice[@] {
+    Step = 0
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+  Slice[@] {
+    Step = 10
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+  Slice[@] {
+    Step = 20
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+  Slice[@] {
+    Step = 30
+    Time = 0.000000e+00
+    VectorMinMax {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+    MinMax[@] {
+      Min = 0.000000e+00
+      Max = 0.000000e+00
+    }
+  }
+}
+

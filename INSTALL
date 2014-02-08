@@ -1,0 +1,107 @@
+/*
+ * PFClib - Parallel File Compression library
+ *
+ * Copyright (c) 2013-2014 Advanced Institute for Computational Science, RIKEN.
+ * All rights reserved.
+ *
+ */
+
+
+SOFTWARE REQUIREMENT
+====================
+
+- MPI library
+- Text parsing library
+- CPM library
+- CIO library
+
+
+
+HOW TO COMPILE
+==============
+
+1. with configure
+
+$ ./configure [options]
+$ make
+# make install
+
+
+
+Configure options:
+
+ --host=hostname
+    Specify in case of cross-compilation.
+
+ --prefix=INSTALL_DIR
+    Specify a directory to be installed. The default directory is /usr/local/FFV/PFClib.
+
+ —with-example=(yes|no)
+    Specify compilation of examples. Default is yes.
+
+ --with-ompi=OPENMPI_DIR
+    If the OpenMPI library is used, specify the directory path that OpenMPI library is
+    installed. This option will be required to use a native compiler. Instead, if the 
+    wrapper compiler, e.g., mpicxx, is used to compile, this options can be eliminated.
+
+ --with-parser=TEXTPARSER_PATH
+    Specify the directory path that TextParser library is installed.
+
+ --with-cpm=CPM_PATH
+    Specify the directory path that CPM library is installed.
+
+ --with-cio=CIO_PATH
+    Specify the directory path that CIO library is installed.
+
+ --without-MPI=(yes|no)
+    If you compile PFC library for parallel environment with MPI library, specify 'yes',
+    otherwise 'no'. This option is valid for compiling staging tool on login node of K/FX.
+
+
+ CXX=CXX_COMPILER
+   Specify C++ compiler or a wrapper compiler for MPI. If a wrapper compiler is specified, 
+   set string as CXX=mpiCC without directory prefix. To do so, please set path before
+   compilation.
+
+ CXXFLAGS=CXX_OPTIONS
+    Specify C++ compiler options.
+
+
+Here is examples. 
+
+## for the combination of Intel compiler and OpenMPI.
+
+  $ ./configure --with-ompi=/opt/openmpi \
+                --with-parser=/usr/local/FFV/TextParser \
+                --with-cpm=/usr/local/FFV/CPMlib \
+                --with-cio=/usr/local/FFV/CIOlib \
+                CXX=icpc \
+                CXXFLAGS="-O3 -Wall"
+
+
+## OpenMPI with wrapper compiler, assume that mpicxx is a wrapper compiler for OpenMPI.
+
+  $ ./configure --prefix=/usr/local/FFV/PFClib \
+                --with-parser=/usr/local/FFV/TextParser \
+                --with-cpm=/usr/local/FFV/CPMlib \
+                --with-cio=/usr/local/FFV/CIOlib \
+                CXX=mpicxx \
+                CXXFLAGS=-O3
+
+
+## K-computer
+
+  $ ./configure --prefix=$1 \
+                --with-parser=hoge \
+                --with-cpm=hogecio \
+                --with-cio=hogecpm \
+                --host=sparc64-unknown-linux-gnu \
+                CXX=mpiFCCpx \
+                CXXFLAGS="-Kfast,ocl,preex,simd=2,uxsimd,array_private,parallel,openmp,optmsg=2 -V -Nsrc"
+
+
+2. Hand compile
+
+If a provided configure does not work, use Makefile_hand to build this library. At first,
+edit MACRO to tell your machine environment.
+

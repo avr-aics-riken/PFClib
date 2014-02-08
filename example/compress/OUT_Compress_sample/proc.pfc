@@ -1,0 +1,45 @@
+Domain {
+
+  GlobalOrigin        = (-5.000000e-01, -5.000000e-01, -5.000000e-01)
+  GlobalRegion        = (1.250000e-01, 1.250000e-01, 1.250000e-01)
+  GlobalVoxel         = (8, 8, 8)
+  GlobalDivision      = (2, 2, 1)
+
+}
+
+Division {
+
+  Region[@] {
+
+    ID        = 0
+    VoxelSize = (4, 4, 8)
+    HeadIndex = (1, 1, 1)
+    TailIndex = (4, 4, 8)
+
+  }
+  Region[@] {
+
+    ID        = 1
+    VoxelSize = (4, 4, 8)
+    HeadIndex = (5, 1, 1)
+    TailIndex = (8, 4, 8)
+
+  }
+  Region[@] {
+
+    ID        = 2
+    VoxelSize = (4, 4, 8)
+    HeadIndex = (1, 5, 1)
+    TailIndex = (4, 8, 8)
+
+  }
+  Region[@] {
+
+    ID        = 3
+    VoxelSize = (4, 4, 8)
+    HeadIndex = (5, 5, 1)
+    TailIndex = (8, 8, 8)
+
+  }
+
+}

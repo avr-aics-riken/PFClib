@@ -1,0 +1,48 @@
+#
+# Makefile
+#
+
+SHELL = /bin/sh
+
+include ./Makefile_include.$(System)
+
+TARGET = pfcfrm
+
+OBJS   = PfcFunction.o ActiveSubDomain.o Staging.o main.o
+
+CIO_DIR=../../../../../Library/CIOlib_gnu_single
+CIO_LIB=-L$(CIO_DIR)/lib -lCIO
+
+TEXT_PARSER_DIR=../../../../../Library/TextParser_gnu_single
+# with mpi
+#TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lMPITP
+# without mpi
+TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lTP
+
+INCS = -I../include -I$(TEXT_PARSER_DIR)/include -I$(CIO_DIR)/include
+
+LIBS = $(CIO_LIB) $(TEXT_PARSER_LIB)
+
+############################################################
+# Rules
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS) $(HEADER)
+	$(LD) -o $@ $(OBJS) $(LDFLAGS) $(LIBS) > $@.list 2>&1
+
+objs: $(OBJS)
+
+clean:
+	-rm -f *.[os] *.mod *.lst *.list *~ $(TARGET)
+
+############################################################
+.SUFFIXES:
+.SUFFIXES: .o .cpp
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< > $*.list 2>&1
+
+
+############################################################
+

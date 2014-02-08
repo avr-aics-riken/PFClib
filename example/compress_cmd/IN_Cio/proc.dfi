@@ -1,0 +1,30 @@
+Domain {
+
+  GlobalOrigin        = (-5.000000e-01, -5.000000e-01, -5.000000e-01)
+  GlobalRegion        = (3.125000e-02, 3.125000e-02, 3.125000e-02)
+  GlobalVoxel         = (2, 2, 2)
+  GlobalDivision      = (1, 1, 1)
+  ActiveSubdomainFile = ""
+
+}
+
+MPI {
+
+  NumberOfRank   = 1
+  NumberOfGroup  = 1
+
+}
+
+Process {
+
+  Rank[@] {
+
+    ID        = 0
+    HostName  = ""
+    VoxelSize = (2, 2, 2)
+    HeadIndex = (1, 1, 1)
+    TailIndex = (2, 2, 2)
+
+  }
+
+}

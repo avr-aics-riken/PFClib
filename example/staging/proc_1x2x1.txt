@@ -1,0 +1,8 @@
+
+Domain {
+
+  GlobalVoxel         = (8, 8, 8)
+  GlobalDivision      = (1, 2, 1)
+  ActiveSubdomainFile = ""
+
+}

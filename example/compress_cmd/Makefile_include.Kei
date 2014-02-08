@@ -1,0 +1,20 @@
+# makefile include for K computer
+
+############################################################
+# Compile and Link Commands and Options
+#
+############################################################
+CXX = mpiFCCpx
+LD  = $(CXX)
+
+CXXOPT  = -Kfast -Kocl -Kpreex -Nsrc,sta -V
+#LINK  = -SSL2
+LINK  =
+
+
+############################################################
+
+CXXFLAGS = $(CXXOPT) $(INCS)
+LDFLAGS  = $(LINK)
+
+

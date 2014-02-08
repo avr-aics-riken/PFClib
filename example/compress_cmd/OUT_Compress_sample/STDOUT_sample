@@ -1,0 +1,14 @@
+##### Compression Command start #####
+##### Compression Command start #####
+	[./IN_Cio/hoge/vel_0000000000.sph] has read :	step=0  time=0.000000e+00 ]
+	[./IN_Cio/hoge/vel_0000000010.sph] has read :	step=10  time=0.000000e+00 ]
+**** current_layer_no =0 Calculated CompressError(%) = 1.78982  ****
+**** Finished calclulation: UserInputError(%)=1 Over ****
+      Number Of CalculatedLayer = 1
+	[./IN_Cio/hoge/veltmp_0000000000.sph] has read :	step=0  time=0.000000e+00 ]
+	[./IN_Cio/hoge/veltmp_0000000010.sph] has read :	step=10  time=0.000000e+00 ]
+**** current_layer_no =0 Calculated CompressError(%) = 1.78982  ****
+**** Finished calclulation: UserInputError(%)=1 Over ****
+      Number Of CalculatedLayer = 1
+##### Compression Command  Normal End  #####
+##### Compression Command  Normal End  #####
