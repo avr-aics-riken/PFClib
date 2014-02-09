@@ -13,7 +13,6 @@ pfcfrm_CXXFLAGS = \
   -I$(top_builddir)/include \
   -I$(top_builddir)/utility/staging/include \
   -I@CIO_DIR@/include \
-  @CPM_CFLAGS@ \
   @CIO_CFLAGS@ \
   @TP_CFLAGS@ 
 
@@ -34,7 +33,6 @@ pfcfrm_include_HEADERS = \
 
 pfcfrm_LDADD = \
   -L$(top_builddir)/src \
-  @CPM_LDFLAGS@ \
   @CIO_LDFLAGS@ \
   @TP_LDFLAGS@
 

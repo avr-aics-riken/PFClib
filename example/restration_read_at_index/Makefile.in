@@ -178,9 +178,6 @@ CFLAGS = @CFLAGS@
 CIO_CFLAGS = @CIO_CFLAGS@
 CIO_DIR = @CIO_DIR@
 CIO_LDFLAGS = @CIO_LDFLAGS@
-CPM_CFLAGS = @CPM_CFLAGS@
-CPM_DIR = @CPM_DIR@
-CPM_LDFLAGS = @CPM_LDFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -283,22 +280,18 @@ pfcRestoreIndex_SOURCES = main.cpp
 pfcRestoreIndex_CXXFLAGS = \
     -I$(top_builddir)/include \
     @MPI_CFLAGS@ \
-    @CPM_CFLAGS@ \
     @CIO_CFLAGS@ \
     @TP_CFLAGS@
 
 pfcRestoreIndex_LDADD = \
     -L$(top_builddir)/src \
     @PFC_LIBS@ \
-    @CPM_LDFLAGS@ \
     @CIO_LDFLAGS@ \
     @MPI_LDFLAGS@ \
     @MPI_LIBS@ \
     @TP_LDFLAGS@
 
-dist_noinst_DATA = IN_Compress OUT_sample _ReadMe.txt go.sh run.sh \
-  compile.Kei.sh Makefile_include.Kei Makefile_hand Makefile_include.linux-gnu
-
+dist_noinst_DATA = IN_Compress OUT_sample _ReadMe.txt go.sh run.sh Makefile_hand
 all: all-am
 
 .SUFFIXES:

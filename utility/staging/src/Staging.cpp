@@ -1280,6 +1280,8 @@ Staging::WriteIndexDfiFile(const std::string dfi_name)
   std::string outDirPath("./");
 
   cio_FileInfo fileInfo ( 
+                CIO::E_CIO_DFITYPE_CARTESIAN, // Cartesian
+                CIO::E_CIO_FNAME_STEP_RANK, // step-rank
                 outDirPath,
                 dfi_Finfo->TimeSliceDirFlag,
                 dfi_Finfo->Prefix,

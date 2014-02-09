@@ -12,7 +12,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.57])
-AC_INIT([PFClib],[0.7.0],[keno@riken.jp],[PFClib])
+AC_INIT([PFClib],[0.7.1],[keno@riken.jp],[PFClib])
 AM_INIT_AUTOMAKE()
 AC_CONFIG_SRCDIR([src/PfcCioDfiUtil.cpp])
 AM_CONFIG_HEADER([config.h])
@@ -21,7 +21,7 @@ AM_CONFIG_HEADER([config.h])
 #
 # Revision No.
 #
-PFC_REVISION="20140208_1700"
+PFC_REVISION="20140209_1700"
 AC_SUBST(PFC_REVISION)
 
 
@@ -70,14 +70,14 @@ AC_SUBST(MPI_LIBS)
 # 
 # MPI library
 #
-AC_ARG_WITH(MPI, [AC_HELP_STRING([--without-MPI],[do not use MPI library])], , with_MPI=yes)
-if test "$with_MPI" = "no" ; then
+AC_ARG_WITH(MPI, [AC_HELP_STRING([--with-MPI],[do not use MPI library])], , with_MPI=yes)
+if test "x$with_MPI" = "xno" ; then
   CXXFLAGS=-D_PFC_WITHOUT_MPI_
 else
 
   # openmpi
   AC_ARG_WITH( ompi, [AC_HELP_STRING([--with-ompi=dir],[Specify OpenMPI install directory])], , with_ompi=none)
-  if test "$with_ompi" != "none" ; then
+  if test "x$with_ompi" != "xnone" ; then
     MPI_DIR=$with_ompi;
     MPI_CFLAGS=-I$MPI_DIR/include
     MPI_LDFLAGS=-L$MPI_DIR/lib
@@ -91,9 +91,9 @@ fi
 # Warning
 #
 
-if test "$with_MPI" = "yes" ; then
-  if test "$enable_mpi" != "wrappermpi" ; then
-    if test "$with_ompi" = "none" ; then
+if test "x$with_MPI" = "xyes" ; then
+  if test "x$enable_mpi" != "xwrappermpi" ; then
+    if test "x$with_ompi" = "xnone" ; then
       echo "  Warning: OpenMPI library is not specified."
       echo "           If compilation error occurs about MPI, specify --with-ompi option."
     fi
@@ -112,20 +112,20 @@ AC_ARG_WITH(example, [AC_HELP_STRING([--with-example=(yes|no)],[make example [ye
 #
 # CPMlib
 #
-AC_ARG_WITH(cpm, [AC_HELP_STRING([--with-cpm=dir],[Specify CPMlib installed directory])], , with_cpm=none)
-AC_SUBST(CPM_DIR)
-AC_SUBST(CPM_CFLAGS)
-AC_SUBST(CPM_LDFLAGS)
-if test "$with_cpm" != "none" ; then
-  CPM_DIR=$with_cpm;
-  CPM_CFLAGS=`$CPM_DIR/bin/cpm-config --cflags`
-  CPM_LDFLAGS=`$CPM_DIR/bin/cpm-config --libs`
-  if test "$enable_mpi" = "none" ; then
-    echo "  Error: MPI library is not specified."
-    echo "         --with-cpm option used MPI."
-    exit 1
-  fi
-fi
+#AC_ARG_WITH(cpm, [AC_HELP_STRING([--with-cpm=dir],[Specify CPMlib installed directory])], , with_cpm=none)
+#AC_SUBST(CPM_DIR)
+#AC_SUBST(CPM_CFLAGS)
+#AC_SUBST(CPM_LDFLAGS)
+#if test "x$with_cpm" != "xnone" ; then
+#  CPM_DIR=$with_cpm;
+#  CPM_CFLAGS=`$CPM_DIR/bin/cpm-config --cflags`
+#  CPM_LDFLAGS=`$CPM_DIR/bin/cpm-config --libs`
+#  if test "x$enable_mpi" = "xnone" ; then
+#    echo "  Error: MPI library is not specified."
+#    echo "         --with-cpm option uses MPI."
+#    exit 1
+#  fi
+#fi
 
 
 #
@@ -136,7 +136,7 @@ AC_SUBST(TP_DIR)
 AC_SUBST(TP_CFLAGS)
 AC_SUBST(TP_LDFLAGS)
 
-if test "$with_parser" != "none" ; then
+if test "x$with_parser" != "xnone" ; then
   TP_DIR=$with_parser;
   TP_CFLAGS=`$TP_DIR/bin/tp-config --cflags`
   TP_LDFLAGS=`$TP_DIR/bin/tp-config --libs`
@@ -154,15 +154,22 @@ AC_ARG_WITH(cio, [AC_HELP_STRING([--with-cio=dir],[Specify CIOlib installed dire
 AC_SUBST(CIO_DIR)
 AC_SUBST(CIO_CFLAGS)
 AC_SUBST(CIO_LDFLAGS)
-if test "$with_cio" != "none" ; then
+if test "x$with_cio" != "xnone" ; then
   CIO_DIR=$with_cio;
   CIO_CFLAGS=`$CIO_DIR/bin/cio-config --cflags`
   CIO_LDFLAGS=`$CIO_DIR/bin/cio-config --libs`
-  if test "$enable_mpi" = "none" ; then
-    echo "  Error: MPI library is not specified."
-    echo "         --with-cpm option used MPI."
-    exit 1
-  fi
+fi
+
+
+# 
+# staging tools
+#
+AC_ARG_WITH(staging, [AC_HELP_STRING([--with-staging=(no|yes)],[install staging tool])], , with_staging=no)
+
+# if cross-compile, staging is not build >> only login node
+if test "x$host" != "x" ; then
+  echo "Warning : Staging tool is not build due to cross-compilation."
+  with_staging=no
 fi
 
 
@@ -175,7 +182,7 @@ AC_SUBST(PFC_CFLAGS)
 PFC_LDFLAGS="-L$PFC_INST_DIR/lib"
 AC_SUBST(PFC_LDFLAGS)
 
-PFC_LIBS="-lPFC -mkl"
+PFC_LIBS="-lPFC"
 AC_SUBST(PFC_LIBS)
 
 
@@ -184,10 +191,16 @@ AC_SUBST(PFC_LIBS)
 # MAKE_SUB_DIRS
 #
 AC_SUBST(MAKE_SUB_DIRS)
-MAKE_SUB_DIRS="src doc utility/staging/src"
+MAKE_SUB_DIRS="src doc"
+
+# staging
+if test "x$with_staging" != "xyes" ; then
+  MAKE_SUB_DIRS="$MAKE_SUB_DIRS"" utility/staging/src"
+  with_staging=no
+fi
 
 # example
-if test "$with_example" = "yes" ; then
+if test "x$with_example" = "xyes" ; then
   MAKE_SUB_DIRS="$MAKE_SUB_DIRS"" example/compress example/compress_cmd example/restration_read_at_index"
   MAKE_SUB_DIRS="$MAKE_SUB_DIRS"" example/restration_read_at_index_on_the_fly example/restration_read_in_range"
 fi
@@ -224,16 +237,21 @@ AC_TYPE_SIZE_T
 AC_CHECK_FUNCS([memset mkdir pow sqrt strcasecmp strdup strerror])
 
 
-
+# generate files
 AC_CONFIG_FILES([Makefile \
                  doc/Makefile \
                  src/Makefile \
                  pfc-config \
                  include/pfcVersion.h \
-                 utility/staging/src/Makefile])
+                 ])
+
+# staging
+if test "x$with_staging" != "xyes" ; then
+  AC_CONFIG_FILES([utility/staging/src/Makefile])
+fi
 
 # example
-if test "$with_example" = "yes" ; then
+if test "x$with_example" = "xyes" ; then
   AC_CONFIG_FILES([ \
       example/compress/Makefile \
       example/compress_cmd/Makefile \

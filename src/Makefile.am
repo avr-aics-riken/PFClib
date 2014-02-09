@@ -11,7 +11,7 @@
 
 lib_LIBRARIES = libPFC.a
 
-libPFC_a_CXXFLAGS = @MPI_CFLAGS@ @CPM_CFLAGS@ @CIO_CFLAGS@ @TP_CFLAGS@ -I$(top_builddir)/include
+libPFC_a_CXXFLAGS = @MPI_CFLAGS@ @CIO_CFLAGS@ @TP_CFLAGS@ -I$(top_builddir)/include
 
 libPFC_a_SOURCES = \
     PfcCioDfiUtil.cpp \
@@ -74,4 +74,5 @@ PFC_include_HEADERS = \
     $(top_builddir)/include/PfcTextParser.h \
     $(top_builddir)/include/PfcTimeSlice.h \
     $(top_builddir)/include/PfcUnitList.h \
+    $(top_builddir)/include/PfcVersion.h \
     $(top_builddir)/include/mpi_stubs.h
