@@ -4,15 +4,21 @@
 
 SHELL = /bin/sh
 
-include ./Makefile_include.$(System)
+#-------------------------------------
+#include ./Makefile_include.$(System)
+CXX = mpiFCCpx
+LD  = $(CXX)
 
-TARGET = compress.exe
+CXXFLAGS  = -Kfast -Kocl -Kpreex -Nsrc,sta -V $(INCS)
+LDFLAGS   = 
+#-------------------------------------
+
+TARGET = pfcCompress
 
 OBJS   = main.o
 
 
 PFC_DIR=../..
-#PFC_LIB=$(PFC_DIR)/src/*.o
 PFC_LIB=-L$(PFC_DIR)/src -lPFC
 
 CIO_DIR=../../../../Library/CIOlib

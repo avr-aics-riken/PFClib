@@ -4,13 +4,21 @@
 
 SHELL = /bin/sh
 
-include ./Makefile_include.$(System)
+#-------------------------------------
+#include ./Makefile_include.$(System)
+CXX = g++
+LD  = $(CXX)
+
+CXXFLAGS  = -O2 -D_CIO_WITHOUT_MPI_ $(INCS)
+LDFLAGS   = -lstdc++
+#-------------------------------------
+
 
 TARGET = pfcfrm
 
 OBJS   = PfcFunction.o ActiveSubDomain.o Staging.o main.o
 
-CIO_DIR=../../../../../Library/CIOlib_gnu_single
+CIO_DIR=../../../../../Library/CIOlib_1.5.2_single
 CIO_LIB=-L$(CIO_DIR)/lib -lCIO
 
 TEXT_PARSER_DIR=../../../../../Library/TextParser_gnu_single
