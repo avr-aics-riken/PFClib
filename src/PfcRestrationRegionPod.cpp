@@ -245,10 +245,18 @@ CPfcRestrationRegionPod::ReadData (
          const int stepID                    // [in]  ステップID (起点0)
        )
 {
+  PFC::E_PFC_ERRORCODE ret=PFC::E_PFC_SUCCESS;
+
   // POD 圧縮内部データの配列形状 IJKN と一致
   if( arrayShape == m_arrayShape ) 
   {
-    return ReadFieldData( v, stepID );
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t251_r);
+#endif
+    ret = ReadFieldData( v, stepID );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t251_r);
+#endif
   }
   // 読み出し配列形状 NIJK
   else
@@ -256,7 +264,13 @@ CPfcRestrationRegionPod::ReadData (
     double* dwk_ijkn = new double[m_numComponent*m_numSize];
     PFC::E_PFC_ERRORCODE ret;
 
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t251_r);
+#endif
     ret = ReadFieldData( dwk_ijkn, stepID );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t251_r);
+#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       delete[] dwk_ijkn;
       return ret;
@@ -272,7 +286,7 @@ CPfcRestrationRegionPod::ReadData (
     delete[] dwk_ijkn;
   }
 
-  return PFC::E_PFC_SUCCESS;
+  return ret;
 }
 
 
@@ -302,7 +316,13 @@ CPfcRestrationRegionPod::ReadFieldData (
     DEBUG_PRINT("   LoadCompressDataOnMem() Start\n");
     fflush(stdout);
 #endif
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t261_r);
+#endif
     ret = LoadCompressDataOnMem();
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t261_r);
+#endif
 #if 0
     DEBUG_PRINT("   LoadCompressDataOnMem() End ret=%d\n",ret);
     fflush(stdout);
@@ -320,7 +340,15 @@ CPfcRestrationRegionPod::ReadFieldData (
     DEBUG_PRINT("   ExpandData() Start\n");
     fflush(stdout);
 #endif
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t263_r);
+#endif
+
   ret = ExpandData ( v, stepID );
+
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t263_r);
+#endif
 #if 0
     DEBUG_PRINT("   ExpandData() End ret=%d\n",ret);
     fflush(stdout);

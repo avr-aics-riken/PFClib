@@ -14,7 +14,6 @@
 
 
 #include "PfcCompressPod.h"
-//#include "PfcCioDfiUtil.h"
 #include "PfcFunction.h"
 
 
@@ -191,12 +190,18 @@ CPfcCompressPod::WriteData( void )
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     CalcPodBase()  Start\n");
 #endif
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t312_c);
+#endif
     ret = CalcPodBase(
                         m_pFlowData,        // (in)
                         m_curPodBaseSize,   // (in)
                         m_curNumSize,       // (in)
                         m_pPod_base_r       // (out)
                     );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t312_c);
+#endif
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     CalcPodBase()  End  ret=%d\n",ret);
 #endif
@@ -209,6 +214,9 @@ CPfcCompressPod::WriteData( void )
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     CalcPodCoef()  Start\n");
 #endif
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t314_c);
+#endif
     CalcPodCoef(
                 m_pPod_base_r,      // (in)
                 m_pFlowData,        // (in)
@@ -216,6 +224,9 @@ CPfcCompressPod::WriteData( void )
                 m_curNumSize,       // (in)
                 &m_pCoef_a[m_regionMaxStep*m_layerNo]   // (out)
             );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t314_c);
+#endif
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     CalcPodCoef()  End\n");
 #endif
@@ -227,6 +238,9 @@ CPfcCompressPod::WriteData( void )
     //   ・誤差が指定値を超えた
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     CheckFinish()  Start\n");
+#endif
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t316_c);
 #endif
     ret = CheckFinish (
                 m_layerNo,          // (in)
@@ -240,6 +254,9 @@ CPfcCompressPod::WriteData( void )
                 m_pCoef_a,          // (in)
                 finish_flg          // (out)
             );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t316_c);
+#endif
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     CheckFinish()  End  ret=%d\n",ret);
 #endif
@@ -283,11 +300,17 @@ CPfcCompressPod::WriteData( void )
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     SwapBinaryData()  Start\n");
 #endif
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t318_c);
+#endif
     ret = SwapBinaryData( 
                     m_pPod_base_r,      // (in)
                     m_curPodBaseSize,   // (in/out)
                     m_pFlowData         // (out) pointer out
                 ); 
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t318_c);
+#endif
 #ifdef DEBUG_PFC
     DEBUG_PRINT("     SwapBinaryData()  End  ret=%d\n",ret);
 #endif
@@ -312,7 +335,13 @@ CPfcCompressPod::WriteData( void )
     fflush(stdout);
 #endif
 
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t330_c);
+#endif
     Output();
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t330_c);
+#endif
 
 #ifdef DEBUG_PFC
     DEBUG_PRINT("---- CPfcCompressPod::WriteData() Output() End\n");

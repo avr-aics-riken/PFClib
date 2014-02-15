@@ -16,6 +16,9 @@
  */
 
 #include "PfcDefine.h"
+#ifdef USE_PMLIB
+#include "PfcPerfMon.h"
+#endif
 
 #include <stdlib.h>
 #include <errno.h>

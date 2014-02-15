@@ -22,9 +22,19 @@
 PFC::E_PFC_ERRORCODE
 CPfcCompress::WriteProcFile( void )
 {
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t20_c);
+#endif
+
   // Division&Region情報の収集＆作成
   CPfcDivision pfcDivision;
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t201_c);
+#endif
   GatherAndCreateDivisionInfo( pfcDivision );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t201_c);
+#endif
   
 
   // ランク０のみファイル出力
@@ -70,22 +80,38 @@ CPfcCompress::WriteProcFile( void )
              m_domainDivision
             );
             
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t202_c);
+#endif
   if( pfcDomain.Write(fp, 0) != PFC::E_PFC_SUCCESS )
   {
     if (fp) fclose(fp);
     PFC_PRINT("error write domain.(%s)\n", filename.c_str());
     return PFC::E_PFC_ERROR_WRITE_DOMAIN;
   }
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t202_c);
+#endif
 
   //Division {} の出力
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t203_c);
+#endif
   if( pfcDivision.Write(fp, 0) != PFC::E_PFC_SUCCESS )
   {
     fclose(fp);
     PFC_PRINT("error write division.(%s)\n", filename.c_str());
     return PFC::E_PFC_ERROR_WRITE_DIVISION;
   }
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t203_c);
+#endif
 
   fclose(fp);
+
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t20_c);
+#endif
 
 
   return PFC::E_PFC_SUCCESS;

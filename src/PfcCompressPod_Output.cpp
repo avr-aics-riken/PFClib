@@ -25,13 +25,25 @@ CPfcCompressPod::Output( void )
   PFC::E_PFC_ERRORCODE ret;
 
   //   PODファイル出力  （基底ファイル）
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t332_c);
+#endif
   ret = WritePodBaseFile( m_pPod_base_r );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t332_c);
+#endif
   if( ret !=PFC::E_PFC_SUCCESS ) {
     return ret;
   }
 
   //   PODファイル出力  （係数ファイル）
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t334_c);
+#endif
   ret = WritePodCoefFile( m_pCoef_a );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t334_c);
+#endif
   if( ret !=PFC::E_PFC_SUCCESS ) {
     return ret;
   }
@@ -65,10 +77,16 @@ CPfcCompressPod::WritePodBaseFile(
   DEBUG_PRINT("   CPfcMpiCom::GetMaxInt()  Start\n");
   fflush(stdout);
 #endif
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t341_c);
+#endif
   CPfcMpiCom::GetMaxInt( 
                  m_comm, m_regionMasterRankID, m_numParallel, m_myRankID,
                  m_curPodBaseSize,max_size_pod_base
                );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t341_c);
+#endif
 
   double* pPod_base_in_region;
   if( m_myRankID == m_regionMasterRankID ) {
@@ -90,11 +108,17 @@ CPfcCompressPod::WritePodBaseFile(
   DEBUG_PRINT("     max_size_pod_base   =%d\n",max_size_pod_base);
   fflush(stdout);
 #endif
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t343_c);
+#endif
   CPfcMpiCom::GatherV_DataDouble(
                m_comm, m_regionMasterRankID, m_numParallel, m_myRankID,
                m_curPodBaseSize, pPod_base_r,
                pPod_base_in_region, nsize_pod_base_ranks
             );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t343_c);
+#endif
 
   //--------------------------------------------
   //   基底ファイル出力
@@ -114,6 +138,9 @@ CPfcCompressPod::WritePodBaseFile(
 #ifdef DEBUG_PFC
     DEBUG_PRINT("   CPfcPodFile::WriteBaseFile()  Start\n");
 #endif
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t345_c);
+#endif
     ret = CPfcPodFile::WriteBaseFile(
                 m_outDirPath,           // (in) 出力ディレクトリ
                 m_prefix,               // (in) 属性名
@@ -125,6 +152,9 @@ CPfcCompressPod::WritePodBaseFile(
                 nsize_pod_base_ranks,   // (in) 各ランク内の要素数
                 pPod_base_in_region     // (in) 基底データ
             );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t345_c);
+#endif
 
   }
   

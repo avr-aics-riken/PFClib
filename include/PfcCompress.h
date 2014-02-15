@@ -16,6 +16,9 @@
  */
 
 #include "PfcDefine.h"
+#ifdef USE_PMLIB
+#include "PfcPerfMon.h"
+#endif
 #include "cio_DFI.h"
 #include "PfcDivision.h"
 #include "PfcCompressCioPod.h"

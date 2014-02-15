@@ -1,0 +1,144 @@
+#
+# Makefile
+#
+
+#SHELL = /bin/sh
+
+#-------------------------------------
+#include ./Makefile_include.$(System)
+CXX = mpiFCCpx
+LD  = $(CXX)
+
+CXXFLAGS  = -Kfast -Kocl -Kpreex -Nsrc,sta -V $(INCS)
+#CXXFLAGS  = -Kfast -Kocl -Kpreex -DDEBUG_PFC -Nsrc,sta -V $(INCS)
+#CXXFLAGS  = -Kfast -Kocl -Kpreex -DUSE_PMLIB -Nsrc,sta -V $(INCS)
+#CXXFLAGS  = -Kfast -Kocl -Kpreex -DDEBUG_PFC -DUSE_PMLIB -Nsrc,sta -V $(INCS)
+
+LDFLAGS   =
+#-------------------------------------
+
+TARGET = libPFC.a
+
+AR = ar
+ARFLAG = crsv
+RM = rm -f
+
+INC = ../include
+INC_COMPRESS  =	 $(INC)/PfcCompress.h \
+		 $(INC)/PfcCompressCioPod.h \
+		 $(INC)/PfcCompressPod.h \
+		 $(INC)/PfcCompressCmd.h \
+		 $(INC)/PfcCompressCmdElm.h \
+		 $(INC)/PfcMpiCom.h \
+		 $(INC)/PfcCioDfiUtil.h 
+
+INC_RESTRATION = $(INC)/PfcRestration.h \
+		 $(INC)/PfcRestrationRegion.h \
+		 $(INC)/PfcRestrationRegionPod.h \
+		 $(INC)/PfcCoeffTree.h
+
+INC_COMM       = $(INC)/PfcDefine.h \
+		 $(INC)/PfcVersion.h \
+		 $(INC)/PfcPodFile.h \
+		 $(INC)/PfcTextParser.h \
+		 $(INC)/PfcCompressInfo.h \
+		 $(INC)/PfcDivision.h \
+		 $(INC)/PfcDomain.h \
+		 $(INC)/PfcFileInfo.h \
+		 $(INC)/PfcFilePath.h \
+		 $(INC)/PfcRegion.h \
+		 $(INC)/PfcTimeSlice.h \
+		 $(INC)/PfcUnitList.h \
+		 $(INC)/PfcFunction.h \
+		 $(INC)/PfcPathUtil.h \
+		 $(INC)/PfcPerfMon.h
+
+PERFMON_OBJ=PfcPerfMon.o
+
+OBJS   = PfcCioDfiUtil.o PfcCoeffTree.o PfcCompress.o PfcCompressCioPod.o PfcCompressCmd.o PfcCompressCmdElm.o PfcCompressInfo.o PfcCompressPod.o PfcCompressPod_CalPod.o PfcCompressPod_CheckFinish.o PfcCompressPod_Output.o PfcCompressPod_SwapBinaryData.o PfcCompress_WriteIndexPfcFile.o PfcCompress_WriteProcFile.o PfcDivision.o PfcDomain.o PfcFileInfo.o PfcFilePath.o PfcFunction.o PfcMatrix.o PfcMpiCom.o PfcPathUtil.o PfcPodFile.o PfcRegion.o PfcRestration.o PfcRestrationRegion.o PfcRestrationRegionPod.o PfcRestrationRegionPod_Expand.o PfcTextParser.o PfcTimeSlice.o PfcUnitList.o $(PERFMON_OBJ)
+
+
+CIO_DIR=../../../Library/CIOlib
+TEXT_PARSER_DIR=../../../Library/TextParser
+PM_DIR=../../../Library/PMlib
+
+INCS = -I../include -I$(PM_DIR)/include -I$(TEXT_PARSER_DIR)/include -I$(CIO_DIR)/include
+DEFS =
+
+############################################################
+# Rules
+
+.SUFFIXES:
+.SUFFIXES: .o .cpp
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+#	$(LD) -o $@ $(OBJS) $(LDFLAGS) $(LIBS) > $@.list 2>&1
+
+asms: $(ASMS)
+objs: $(OBJS)
+
+clean:
+	-rm -f *.[os] *.mod *.lst *.list *~  $(TARGET)
+
+############################################################
+
+.o.a:
+	$(AR) $(ARFLAG) $@ $< 2>&1
+
+#---- Compress --------------------------------
+PfcCompress.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompress_WriteIndexPfcFile.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompress_WriteProcFile.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompressCioPod.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompressPod.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompressPod_CalPod.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompressPod_CheckFinish.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompressPod_Output.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompressPod_SwapBinaryData.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcMatrix.o: $(INC_COMPRESS) $(INC_COMM) 
+
+#---- Compress command --------------------------------
+PfcCompressCmd.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCompressCmdElm.o: $(INC_COMPRESS) $(INC_COMM) 
+
+#---- Compress misc --------------------------------
+PfcMpiCom.o: $(INC_COMPRESS) $(INC_COMM) 
+PfcCioDfiUtil.o: $(INC_COMPRESS) $(INC_COMM) 
+
+#---- Restration --------------------------------
+PfcRestration.o: $(INC_RESTRATION) $(INC_COMM) 
+PfcRestrationRegion.o: $(INC_RESTRATION) $(INC_COMM) 
+PfcRestrationRegionPod.o: $(INC_RESTRATION) $(INC_COMM) 
+PfcRestrationRegionPod_Expand.o: $(INC_RESTRATION) $(INC_COMM) 
+PfcCoeffTree.o: $(INC_RESTRATION) $(INC_COMM) 
+
+#---- Pod file --------------------------------
+PfcPodFile.o: $(INC_COMM) 
+
+#---- Pfc file --------------------------------
+PfcTextParser.o: $(INC_COMM) 
+PfcCompressInfo.o: $(INC_COMM) 
+PfcDivision.o: $(INC_COMM) 
+PfcDomain.o: $(INC_COMM) 
+PfcFileInfo.o: $(INC_COMM) 
+PfcFilePath.o: $(INC_COMM) 
+PfcRegion.o: $(INC_COMM) 
+PfcTimeSlice.o: $(INC_COMM) 
+PfcUnitList.o: $(INC_COMM) 
+
+#---- Common --------------------------------
+PfcFunction.o: $(INC_COMM) 
+PfcPathUtil.o: $(INC_COMM) 
+
+
+
+.cpp.o:
+	$(CXX) -c $(CXXFLAGS) $< -o $*.o > $*.list 2>&1
+	$(AR) $(ARFLAG) $(TARGET) $*.o
+#	$(RM) $*.o
+
+
+############################################################
+

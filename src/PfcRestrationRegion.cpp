@@ -116,7 +116,13 @@ CPfcRestrationRegion::LoadCompressDataOnMem( void )
   
   if( m_compressForm == PFC::E_PFC_COMPRESS_FMT_POD )
   {
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t217_r);
+#endif
     ret = pPod->LoadCompressDataOnMem();
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t217_r);
+#endif
 
     if ( ret != PFC::E_PFC_SUCCESS ) { 
       PFC_PRINT( "### ERROR ### ReadBaseFile()\n" );
@@ -196,9 +202,14 @@ CPfcRestrationRegion::ReadDataInRange (
   // 領域データ取得
   if( m_compressForm == PFC::E_PFC_COMPRESS_FMT_POD )
   {
-    //ret = pPod->ReadFieldData( pRegionData, stepID );
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t231_r);
+#endif
     ret = pPod->ReadData( m_pFileInfo->m_arrayShape,
                           pRegionData, stepID );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t231_r);
+#endif
     
     if( ret != PFC::E_PFC_SUCCESS ) {
       PFC_PRINT("error at ReadFieldData()\n");
@@ -211,6 +222,9 @@ CPfcRestrationRegion::ReadDataInRange (
   }
   
   // Min/Max(Head/Tail)領域 のＡＮＤ（重なり）取得
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t233_r);
+#endif
   ret = CPfcFunction::AndMinMax( 
                             head,                   // [in]  対象計算領域の開始位置
                             tail,                   // [in]  対象計算領域の終了位置
@@ -220,6 +234,9 @@ CPfcRestrationRegion::ReadDataInRange (
                             lap_offset2,            // [out] 自身の領域の重なり区間までのオフセット
                             lap_size                // [out] ＡＮＤ（重なり）領域のサイズ
                         );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t233_r);
+#endif
 
   if( ret != PFC::E_PFC_SUCCESS ) {
     delete[] pRegionData;
@@ -232,6 +249,9 @@ CPfcRestrationRegion::ReadDataInRange (
   nsize_to[1] = tail[1] - head[1] + 1;
   nsize_to[2] = tail[2] - head[2] + 1;
 
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t235_r);
+#endif
   CPfcFunction::CopyData (
                   v,                        // [out] コピー先配列のアドレス
                   nsize_to,                 // [in]  コピー先配列のサイズ
@@ -243,6 +263,9 @@ CPfcRestrationRegion::ReadDataInRange (
                   m_pFileInfo->m_numComponent,  // [in]  成分数
                   m_pFileInfo->m_arrayShape     // [in]  配列形状 E_PFC_IJKN/E_PFC_NIJK
            );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t235_r);
+#endif
   
   // 出力領域情報設定
   out_offset_st[0]=lap_offset1[0]; out_offset_st[1]=lap_offset1[1]; out_offset_st[2]=lap_offset1[2];

@@ -44,6 +44,9 @@ CPfcRestration::Init(
          )
 {
   int ierror;
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t10_r);
+#endif
   m_pfcFilePath = pfcFilePath;
   
   /** PFCのディレクトリパスの取得 */
@@ -221,6 +224,10 @@ CPfcRestration::Init(
 #endif
   }
 
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t10_r);
+#endif
+
   return PFC::E_PFC_SUCCESS;
 }
 
@@ -265,12 +272,18 @@ CPfcRestration::GetTimeStepList (
            vector<int>& timeStepList    // [out] タイムステップリスト
        )
 {
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t501_r);
+#endif
   timeStepList.clear();
   
   for(int i=0; i<m_timeSlice.SliceList.size(); i++ ) {
     timeStepList.push_back( m_timeSlice.SliceList[i].step );
   }
 
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t501_r);
+#endif
   return PFC::E_PFC_SUCCESS;
 }
 
@@ -365,7 +378,13 @@ CPfcRestration::LoadCompressDataOnMem(
   m_regionList.clear();
 
   // 読込み領域IDリストの生成 */
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t211_r);
+#endif
   ret = m_division.CheckReadRegion( head, tail, m_regionIdList);
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t211_r);
+#endif
   if( ret != PFC::E_PFC_SUCCESS ) {
     PFC_PRINT("error code : %d\n",(int)ret);
     return ret;
@@ -389,6 +408,9 @@ CPfcRestration::LoadCompressDataOnMem(
     // 対象分割領域 初期化
     int id = m_regionIdList[i];
     
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t213_r);
+#endif
     m_regionList[i]->Init(
                       &m_fileInfo,     // [in] File情報（属性etc.）
                       &m_compressInfo,  // [in] 圧縮情報
@@ -396,9 +418,18 @@ CPfcRestration::LoadCompressDataOnMem(
                       &m_domain,            // [in] ドメイン情報
                       &(m_division.m_regionList[id])    // [in] 分割領域情報（１領域）
        );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t213_r);
+#endif
 
     // 圧縮データロード
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t215_r);
+#endif
     ret = m_regionList[i]->LoadCompressDataOnMem();
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t215_r);
+#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       PFC_PRINT("error code : %d\n",(int)ret);
       return ret;
@@ -452,6 +483,9 @@ CPfcRestration::ReadData (
 {
   PFC::E_PFC_ERRORCODE ret;
   bool bNewLoad = false;
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t20_r);
+#endif
 
   // 圧縮データ ロード済み
   if( m_bLoadCompressData )
@@ -467,7 +501,13 @@ CPfcRestration::ReadData (
   else
   {
     // 圧縮データ ロード
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t201_r);
+#endif
     ret = LoadCompressDataOnMem( head, tail );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t201_r);
+#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       PFC_PRINT("Error at LoadCompressDataOnMem\n");
       return ret;
@@ -484,6 +524,9 @@ CPfcRestration::ReadData (
     int out_offset_st[3], out_size  [3];   
     
     // 分割領域クラスよりをRead （部分的に値が設定されることに注意）
+#ifdef USE_PMLIB
+    PfcPerfMon::Start(t202_r);
+#endif
     ret = m_regionList[i]->ReadDataInRange (
                     v,              // [out] 展開後の出力領域 
                     step,           // [in]  ステップ番号
@@ -492,6 +535,9 @@ CPfcRestration::ReadData (
                     out_offset_st,  // [out] vの更新領域のheadからのオフセット
                     out_size        // [out] vの更新領域のサイズ
            );
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t202_r);
+#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       PFC_PRINT("Error ReadDataInRange\n");
       return ret;
@@ -503,6 +549,9 @@ CPfcRestration::ReadData (
     DeleteCompressDataOnMem();
   }
 
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t20_r);
+#endif
 
   return PFC::E_PFC_SUCCESS;
 }

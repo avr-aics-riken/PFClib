@@ -148,10 +148,16 @@ CPfcCompressCioPod::Init(
   // CIOファイル(sph,bovファイル）Read
 #ifndef PFC_POD_USE_ORIG_ARRAYSHAPE
   //   POD圧縮データをIJKN固定として読みだす
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t110_c);
+#endif
   ret = ReadCioFile_IJKN( 
                m_pFlowData,
                dataType, myStartStepPos, myNumStep, regionSize
             );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t110_c);
+#endif
   if( ret != PFC::E_PFC_SUCCESS ) {
     PFC_PRINT("### ERROR  CompressCioPod ReadCioFile() Error\n" );
     return ret;
@@ -167,56 +173,12 @@ CPfcCompressCioPod::Init(
   }
 #endif
 
-#ifdef DEBUG_PFC
-#if 1
-  // IJKNの場合のデバッグ出力
-  for(int istep=myStartStepPos; istep<(myStartStepPos+myNumStep); istep++ ) {
-  for(int ic=0; ic<numComponent; ic++ ) {
-    for(int iz=m_regionHead[2]; iz<=m_regionTail[2]; iz++ ) {
-      for(int iy=m_regionHead[1]; iy<=m_regionTail[1]; iy++ ) {
-        for(int ix=m_regionHead[0]; ix<=m_regionTail[0]; ix++ ) {
-          int ip =   ix_size*iy_size*iz_size*numComponent*(istep-myStartStepPos)
-                   + ix_size*iy_size*iz_size*ic
-                   + ix_size*iy_size*(iz-m_regionHead[2])
-                   + ix_size*(iy-m_regionHead[1]) 
-                   + (ix-m_regionHead[0]);
-          int iwk = istep + ic + iz + iy + ix;
-
-          DEBUG_PRINT("istep=%d ic=%3d iz=%3d iy=%3d ix=%3d iwk=%d val=%15.4lf\n",
-                                 istep,ic,iz,iy,ix,iwk,m_pFlowData[ip]);
-        }
-      }
-    }
-  }
-  }
-#endif
-#if 0
-  // NIJKの場合のデバッグ出力
-  for(int istep=myStartStepPos; istep<(myStartStepPos+myNumStep); istep++ ) {
-    for(int iz=m_regionHead[2]; iz<=m_regionTail[2]; iz++ ) {
-      for(int iy=m_regionHead[1]; iy<=m_regionTail[1]; iy++ ) {
-        for(int ix=m_regionHead[0]; ix<=m_regionTail[0]; ix++ ) {
-          for(int ic=0; ic<numComponent; ic++ ) {
-          int ip =   numComponent*ix_size*iy_size*iz_size*(istep-myStartStepPos)
-                   + numComponent*ix_size*iy_size*(iz-m_regionHead[2])
-                   + numComponent*ix_size*(iy-m_regionHead[1]) 
-                   + numComponent*(ix-m_regionHead[0])
-                   + ic;
-          int iwk = istep + ic + iz + iy + ix;
-
-          DEBUG_PRINT("istep=%d ic=%3d iz=%3d iy=%3d ix=%3d iwk=%d val=%15.4lf\n",
-                                 istep,ic,iz,iy,ix,iwk,m_pFlowData[ip]);
-          }
-        }
-      }
-    }
-  }
-#endif
-#endif
-
   // POD圧縮クラス（１次元）生成＆初期化
   m_pPod = new CPfcCompressPod();
     
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t120_c);
+#endif
   ret = m_pPod->Init( 
                         m_comm,
                         m_outDirPath,
@@ -229,6 +191,9 @@ CPfcCompressCioPod::Init(
                         m_pFlowData,
                         myNumStep
                     );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t120_c);
+#endif
   if( ret != PFC::E_PFC_SUCCESS ) {
     PFC_PRINT("### ERROR  CompressCioPod initialize erro\n" );
     return ret;
@@ -365,13 +330,21 @@ CPfcCompressCioPod::ReadCioFile_IJKN (
   if( pCioFileInfo->ArrayShape == CIO::E_CIO_IJKN ||
       numComponent == 1                              ) 
   {
-    return ReadCioFile (
+    PFC::E_PFC_ERRORCODE ret;
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t112_c);
+#endif
+    ret =ReadCioFile (
                          pFlowData,         // [out] [numStep][unit]
                          dataType,          // [in]  配列のデータタイプ
                          startStep,         // (in)  読み込み開始ステップ (0からの連番）
                          numStep,           // (in)  時間軸方向のサイズ
                          unit               // (in)  領域方向のサイズ
           );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t112_c);
+#endif
+    return ret;
   }
 
   // 以下は
@@ -395,6 +368,9 @@ CPfcCompressCioPod::ReadCioFile_IJKN (
 
     for ( int istep =0; istep<numStep; istep++ )
     {
+#ifdef USE_PMLIB
+      PfcPerfMon::Start(t114_c);
+#endif
       ret_cio = m_pDfiIN->ReadData(
                     fVal,
                     (*m_pStepList)[startStep+istep],
@@ -408,6 +384,9 @@ CPfcCompressCioPod::ReadCioFile_IJKN (
                     i_dummy,
                     f_dummy
                 );
+#ifdef USE_PMLIB
+      PfcPerfMon::Stop(t114_c);
+#endif
                 
       if( ret_cio != CIO::E_CIO_SUCCESS ) {
         PFC_PRINT("ERROR: DFI ReadData() ret=%d\n",ret_cio);
@@ -460,6 +439,9 @@ CPfcCompressCioPod::ReadCioFile_IJKN (
       DEBUG_PRINT("   i=%d  step=%dt\n",i,(*m_pStepList)[startStep+i]);
 #endif
 
+#ifdef USE_PMLIB
+      PfcPerfMon::Start(t114_c);
+#endif
       ret_cio = m_pDfiIN->ReadData(
                     fVal,
                     (*m_pStepList)[startStep+istep],
@@ -473,6 +455,9 @@ CPfcCompressCioPod::ReadCioFile_IJKN (
                     i_dummy,
                     f_dummy
                 );
+#ifdef USE_PMLIB
+      PfcPerfMon::Stop(t114_c);
+#endif
 
       if( ret_cio != CIO::E_CIO_SUCCESS ) {
         PFC_PRINT("ERROR: DFI ReadData() ret=%d\n",ret_cio);
@@ -509,7 +494,13 @@ CPfcCompressCioPod::WriteData( void )
   // 圧縮＆POD(基底ファイル、係数ファイル）出力 
   //    ・index.pfcファイル 出力
   //    ・基底ファイル、係数ファイル 出力
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t310_c);
+#endif
   m_pPod->WriteData();
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t310_c);
+#endif
 
 #ifdef DEBUG_PFC
   DEBUG_PRINT("CPfcCompressCioPod::WriteData() End\n");

@@ -35,6 +35,7 @@ CPfcCompressPod::CheckFinish(
                 int&            finish_flg          // (out)  =0 not finished  =1 finish
        )
 {
+  const double cutoff_ratio=0.01;  // 0付近は誤差率が大きくなるので無視させるための定数
   
   //-------------------------------------
   //  誤差チェック  デバッグ用として誤差率を出力したいので必ず実行
@@ -44,8 +45,22 @@ CPfcCompressPod::CheckFinish(
   for(int i = 0; i < num_size; i++){
     double temp_error = 0.0;
 
+    double fDat_abs_max = 0.0;
     for(int j = 0; j < base_size; j++) {
       double fDat = pFlowData[base_size*i+j];
+      if( fabs(fDat) > fDat_abs_max ) {
+        fDat_abs_max = fabs(fDat);
+      }
+    }
+
+    for(int j = 0; j < base_size; j++) {
+      double fDat = pFlowData[base_size*i+j];
+      // 誤差が大きくなるのを防ぐためのチェック
+      //    0付近は誤差率が大きくなるため
+      if( fabs(fDat) < (cutoff_ratio*fDat_abs_max) ) {
+        continue;
+      }  
+
       double a    = pCoef_a[nalloc_size*layerNo+i];
       
       //if user inputs 5.4, the error should be lower than 5.4%.

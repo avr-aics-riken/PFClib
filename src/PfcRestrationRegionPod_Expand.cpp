@@ -59,6 +59,9 @@ CPfcRestrationRegionPod::ExpandData(
   int*    row_size   = new int[rowNum];
 
   // 経路情報取得
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t271_r);
+#endif
   ret = GetExpandRowInfo(
                 stepID,         // [in]  ステップID
                 rowNum,         // [in]  経路の数
@@ -67,6 +70,9 @@ CPfcRestrationRegionPod::ExpandData(
                 row_st,         // [out] 経路毎の開始位置  (0起点）
                 row_size        // [out] 経路毎のサイズ
             );
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t271_r);
+#endif
   if( ret != PFC::E_PFC_SUCCESS ) {
     PFC_PRINT("Error  GetExpandRowInfo()\n");
     delete[] coef;
@@ -90,6 +96,9 @@ CPfcRestrationRegionPod::ExpandData(
   //------------------------------------------//
   int  nsize = 0;
   // 経路の数ループ
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t273_r);
+#endif
   for(int i = 0; i < rowNum; i++){
     int b_index   = base_index[i];
     for(int k = 0; k < row_size[i]; k++) {
@@ -97,6 +106,9 @@ CPfcRestrationRegionPod::ExpandData(
       nsize++;
     }
   }
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t273_r);
+#endif
   
   if( nsize != nsize_region ) {
     PFC_PRINT("Data size error nsize=%d nsize_region=5d\n", nsize, nsize_region);
