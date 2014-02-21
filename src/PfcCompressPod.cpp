@@ -95,7 +95,7 @@ CPfcCompressPod::Init(
 
   // 並列数チェック
   if( m_numRegion*m_numParallel != m_numRank ) {
-    PFC_PRINT("### ERROR  numRank=%d  numRegion=%d  numParallel  numStep=%d\n",
+    PFC_PRINT("### ERROR  numRank=%d  numRegion=%d  numParallel=%d  numStep=%d\n",
                m_numRank,m_numRegion,m_numParallel, m_numStep );
     return PFC::E_PFC_ERROR;
   }

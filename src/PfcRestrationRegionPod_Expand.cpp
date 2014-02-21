@@ -111,7 +111,7 @@ CPfcRestrationRegionPod::ExpandData(
 #endif
   
   if( nsize != nsize_region ) {
-    PFC_PRINT("Data size error nsize=%d nsize_region=5d\n", nsize, nsize_region);
+    PFC_PRINT("Data size error nsize=%d nsize_region=%5d\n", nsize, nsize_region);
     ret = PFC::E_PFC_ERROR;
   }
 
