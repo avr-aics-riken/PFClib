@@ -80,10 +80,6 @@ void CPfcCoeffTree::construct_tree(int timestep){
 #else
   int timestep_node = (int)(timestep / 2);
   int timestep_node_2 = standard_timestep_node(timestep);
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("CPfcCoeffTree::construct_tree() timestep_node=%d timestep_node_2=%d\n",
-                               timestep_node, timestep_node_2 );
-#endif
 #endif
 
   construct_child(p, curr_layer, timestep_node);

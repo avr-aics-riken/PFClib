@@ -152,13 +152,6 @@ CPfcCompressPod::WriteData( void )
   m_pPod_base_r = NULL; // 基底データ
   m_pCoef_a     = NULL; // 係数データ
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WriteData()  Start\n");
-  DEBUG_PRINT("   m_maxLayer      = %d\n",m_maxLayer);
-  DEBUG_PRINT("   m_myNumStep     = %d\n",m_myNumStep);
-  DEBUG_PRINT("   m_regionMaxStep = %d\n",m_regionMaxStep);
-#endif
-
   // 読み込み領域確保
   m_curPodBaseSize = m_regionSize;
   m_pCoef_a        = new double[m_regionMaxStep*m_maxLayer]; // 最大でアロケート
@@ -167,10 +160,6 @@ CPfcCompressPod::WriteData( void )
   int finish_flg = 0;
   m_layerNo = 0;
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WriteData()  Calculation Start\n");
-#endif
-  
   while( m_layerNo < m_maxLayer )   // MAX レイヤーまでループ
   {
     if( m_layerNo == 0 ) {
@@ -179,17 +168,10 @@ CPfcCompressPod::WriteData( void )
       m_curNumSize = 2;
     }
 
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("  --- layerNo=%d  curNumSize=%d -----\n",m_layerNo,m_curNumSize);
-#endif
-    
     // pod_base_r領域確保
     m_pPod_base_r = new double[m_curPodBaseSize];
     
     // 基底計算
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     CalcPodBase()  Start\n");
-#endif
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t312_c);
 #endif
@@ -202,18 +184,12 @@ CPfcCompressPod::WriteData( void )
 #ifdef USE_PMLIB
     PfcPerfMon::Stop(t312_c);
 #endif
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     CalcPodBase()  End  ret=%d\n",ret);
-#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       break;
     }
       
  
     // 係数計算
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     CalcPodCoef()  Start\n");
-#endif
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t314_c);
 #endif
@@ -227,18 +203,12 @@ CPfcCompressPod::WriteData( void )
 #ifdef USE_PMLIB
     PfcPerfMon::Stop(t314_c);
 #endif
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     CalcPodCoef()  End\n");
-#endif
     
     // 終了判定
     //   以下の条件の時に終了したとみなす
     //   ・m_maxLayerに到達した
     //   ・pod_base_sizeが分割できなくなった
     //   ・誤差が指定値を超えた
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     CheckFinish()  Start\n");
-#endif
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t316_c);
 #endif
@@ -257,9 +227,6 @@ CPfcCompressPod::WriteData( void )
 #ifdef USE_PMLIB
     PfcPerfMon::Stop(t316_c);
 #endif
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     CheckFinish()  End  ret=%d\n",ret);
-#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       break;
     }
@@ -267,10 +234,6 @@ CPfcCompressPod::WriteData( void )
     // 圧縮終了
     if( finish_flg == 1 ) { // 圧縮終了
       m_calculatedLayer = m_layerNo + 1;
-#ifdef DEBUG_PFC
-      DEBUG_PRINT("---- CPfcCompressPod::WriteData()  End of Compression\n");
-      fflush(stdout);
-#endif
       break;    //**** ファイル出力・終了化処理へ *******
     }
 
@@ -281,25 +244,14 @@ CPfcCompressPod::WriteData( void )
     
     if( PFC_CHECK_OPT_SAVE(m_optFlags) )
     {
-#ifdef DEBUG_PFC
-      DEBUG_PRINT("---- CPfcCompressPod::WriteData()  WritePodBaseFile_Debug() Start\n");
-      fflush(stdout);
-#endif
       m_calculatedLayer = m_layerNo + 1;
       ret = WritePodBaseFile_Debug( m_pPod_base_r );
-#ifdef DEBUG_PFC
-      DEBUG_PRINT("---- CPfcCompressPod::WriteData()  WritePodBaseFile_Debug() End ret=%d\n",ret);
-      fflush(stdout);
-#endif
     }
 #endif
     
     // バイナリスワップ
     delete [] m_pFlowData; m_pFlowData=NULL;
    
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     SwapBinaryData()  Start\n");
-#endif
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t318_c);
 #endif
@@ -311,29 +263,16 @@ CPfcCompressPod::WriteData( void )
 #ifdef USE_PMLIB
     PfcPerfMon::Stop(t318_c);
 #endif
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("     SwapBinaryData()  End  ret=%d\n",ret);
-#endif
 
     delete [] m_pPod_base_r; m_pPod_base_r=NULL;
     
     m_layerNo++;    // レイヤー数 カントアップ
   }
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WriteData()  Calculation End\n");
-  DEBUG_PRINT("        m_calculatedLayer = %d\n",m_calculatedLayer);
-  fflush(stdout);
-#endif
-
   // ファイル出力 
   //    ・基底ファイル、係数ファイル 出力
   //    ・index.pfcファイル 出力
   if( ret == PFC::E_PFC_SUCCESS ) {
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("---- CPfcCompressPod::WriteData() Output() Start\n");
-    fflush(stdout);
-#endif
 
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t330_c);
@@ -343,10 +282,6 @@ CPfcCompressPod::WriteData( void )
     PfcPerfMon::Stop(t330_c);
 #endif
 
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("---- CPfcCompressPod::WriteData() Output() End\n");
-    fflush(stdout);
-#endif
   }
 
   // 終了化処理
@@ -361,10 +296,6 @@ CPfcCompressPod::WriteData( void )
   if( m_pPod_base_r != NULL ) {
     delete [] m_pPod_base_r;  m_pPod_base_r=NULL;
   }
-
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WriteData()  End\n");
-#endif
 
   return ret;
 }

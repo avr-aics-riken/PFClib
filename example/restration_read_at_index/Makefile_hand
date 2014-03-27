@@ -26,7 +26,7 @@ CIO_DIR=../../../../Library/CIOlib
 CIO_LIB=-L$(CIO_DIR)/lib -lCIO
 
 TEXT_PARSER_DIR=../../../../Library/TextParser
-TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lMPITP
+TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lTPmpi
 
 PM_DIR=../../../../Library/PMlib
 PM_LIB=-L$(PM_DIR)/lib -lPM

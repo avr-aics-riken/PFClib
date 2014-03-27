@@ -41,10 +41,6 @@ CPfcCioDfiUtil::GetDfiTimeStepList(
   cio_Domain    domain;
   cio_TimeSlice timeSlice;
   
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiTimeStepList() start\n");
-  fflush(stdout);
-#endif
 
   iret = CPfcCioDfiUtil::GetDfiInfo( dfiFilePath, domain, timeSlice );
   if( iret == PFC::E_PFC_SUCCESS ) {
@@ -53,10 +49,6 @@ CPfcCioDfiUtil::GetDfiTimeStepList(
     }
   }
   
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiTimeStepList() end\n");
-  fflush(stdout);
-#endif
   
   return iret;
 }
@@ -72,10 +64,6 @@ CPfcCioDfiUtil::GetDfiInfo(
 {
   cio_TextParser tpCntl;
   
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() start\n");
-  fflush(stdout);
-#endif
 
 
   /** DFIのディレクトリパスの取得 */
@@ -85,17 +73,9 @@ CPfcCioDfiUtil::GetDfiInfo(
   /** index.dfi read */
   /** TPインスタンス */
   
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() tpCntl.getTPinstance() start\n");
-  fflush(stdout);
-#endif
   tpCntl.getTPinstance();
   
   /** 入力ファイル index.dfi をセット */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() tpCntl.readTPfile() start\n");
-  fflush(stdout);
-#endif
   int ierror = 0;
   ierror = tpCntl.readTPfile(dfiFilePath);
   if ( ierror )
@@ -105,10 +85,6 @@ CPfcCioDfiUtil::GetDfiInfo(
   }
 
   /** FilePathの読込み: proc.difパス設定 */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() F_path.Read() start\n");
-  fflush(stdout);
-#endif
   cio_FilePath F_path;
   if( F_path.Read(tpCntl) != CIO::E_CIO_SUCCESS )
   {
@@ -118,10 +94,6 @@ CPfcCioDfiUtil::GetDfiInfo(
 
 
   /** TimeSliceの読込み */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() timeSlice.Read() start\n");
-  fflush(stdout);
-#endif
   if( timeSlice.Read(tpCntl) != CIO::E_CIO_SUCCESS )
   {
     PFC_PRINT("\tTimeSlice Data Read error %s\n",dfiFilePath.c_str());
@@ -134,10 +106,6 @@ CPfcCioDfiUtil::GetDfiInfo(
 
   /** proc.dfi read */
   /** TPインスタンス */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() tpCntl.getTPinstance()  start\n");
-  fflush(stdout);
-#endif
   tpCntl.getTPinstance();
 
   FILE* fp = NULL;
@@ -148,10 +116,6 @@ CPfcCioDfiUtil::GetDfiInfo(
   fclose(fp);
 
   /** 入力ファイル proc.dfi をセット */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() tpCntl.readTPfile()  start\n");
-  fflush(stdout);
-#endif
   ierror = tpCntl.readTPfile(procfile);
   if ( ierror )
   {
@@ -160,10 +124,7 @@ CPfcCioDfiUtil::GetDfiInfo(
   }
 
   /** Domainの読込み */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() domain.Read()  start\n");
-  fflush(stdout);
-#endif
+
   if( domain.Read(tpCntl) != CIO::E_CIO_SUCCESS ) 
   {
     PFC_PRINT("\tDomain Data Read error %s\n",procfile.c_str());
@@ -173,10 +134,6 @@ CPfcCioDfiUtil::GetDfiInfo(
   /** TextParserの破棄 */
   tpCntl.remove();
   
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCioDfiUtil::GetDfiInfo() end\n");
-  fflush(stdout);
-#endif
 
   return PFC::E_PFC_SUCCESS;
 

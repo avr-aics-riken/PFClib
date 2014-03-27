@@ -40,15 +40,6 @@ CPfcRestrationRegionPod::ExpandData(
   
   // rowNum : 検索する経路の数
   int rowNum  = num_base/rnum;
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcRestrationRegionPod::ExpandData() Start\n");
-  DEBUG_PRINT("       m_numStep           =%d\n",m_numStep);
-  DEBUG_PRINT("       max_layer           =%d\n",max_layer);
-  DEBUG_PRINT("       m_numCalculatedLayer=%d\n",m_numCalculatedLayer);
-  DEBUG_PRINT("       num_base            =%d\n",num_base);
-  DEBUG_PRINT("       mlayer              =%d\n",mlayer);
-  DEBUG_PRINT("       rowNum              =%d\n",rowNum);
-#endif
   
   int nsize_region = m_numComponent*m_numSize;
 
@@ -81,15 +72,6 @@ CPfcRestrationRegionPod::ExpandData(
     delete[] row_size;
     return ret;
   }
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("    GetExpandRowInfo()\n");
-  DEBUG_PRINT("       stepID=%d\n",stepID);
-  DEBUG_PRINT("       rowNum=%d\n",rowNum);
-  for(int i=0; i<rowNum; i++) {
-    DEBUG_PRINT("       i=%d coef=%lf base_index=%d row_st=%d row_size=%d\n",
-                      i,coef[i],base_index[i],row_st[i],row_size[i] );
-  }
-#endif
 
   //------------------------------------------//
   //        出力域に設定                      //
@@ -120,9 +102,6 @@ CPfcRestrationRegionPod::ExpandData(
   delete[] row_st;
   delete[] row_size;
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcRestrationRegionPod::ExpandData() End\n");
-#endif
   return ret;
 }
 
@@ -137,10 +116,6 @@ CPfcRestrationRegionPod:: ExpandData(
            )
 {
   PFC::E_PFC_ERRORCODE ret;
-#if 0
-  DEBUG_PRINT("---- CPfcRestrationRegionPod:: ExpandData()  Start\n");
-  DEBUG_PRINT("      stepID=%d  index=%d\n",stepID,index);
-#endif
   int max_layer = CPfcFunction::GetPodMaxLayer( m_numStep );
   int num_base  = int_pow(2,max_layer);
   int mlayer    = max_layer - m_numCalculatedLayer;
@@ -236,21 +211,6 @@ CPfcRestrationRegionPod:: ExpandData(
     v[i] = coef[rowNo]*m_pIndexBase[b_index][b_offset];
   }
 
-#if 0
-  DEBUG_PRINT("  (row info)\n");
-  for(int i=0; i<rowNum; i++)  {
-    DEBUG_PRINT("     coef      [%d] = %lf\n",i,coef[i]);
-    DEBUG_PRINT("     base_index[%d] = %d\n",i,base_index[i]);
-    DEBUG_PRINT("     row_st    [%d] = %d\n",i,row_st[i]);
-    DEBUG_PRINT("     row_size  [%d] = %d\n",i,row_size[i]);
-  }
-  DEBUG_PRINT("  (component info)\n");
-  for(int i=0; i<numComp; i++)  {
-    DEBUG_PRINT("     ipos_comp   [%d] = %d\n",i,ipos_comp[i]);
-    DEBUG_PRINT("     irow_no_comp[%d] = %d\n",i,irow_no_comp[i]);
-    DEBUG_PRINT("     ioffset_comp[%d] = %d\n",i,ioffset_comp[i]);
-  }
-#endif
 
   delete[] coef;
   delete[] base_index;
@@ -260,9 +220,6 @@ CPfcRestrationRegionPod:: ExpandData(
   delete[] irow_no_comp;
   delete[] ioffset_comp;
 
-#if 0
-  DEBUG_PRINT("---- CPfcRestrationRegionPod:: ExpandData()  End\n");
-#endif
 
   return PFC::E_PFC_SUCCESS;
 }
@@ -278,12 +235,6 @@ CPfcRestrationRegionPod:: ExpandDataOnFile(
            )
 {
   PFC::E_PFC_ERRORCODE ret;
-//#if DEBUG_PFC
-#if 0
-  DEBUG_PRINT("---- CPfcRestrationRegionPod:: ExpandDataOnFile()  Start\n");
-  DEBUG_PRINT("      stepID=%d  index=%d\n",stepID,index);
-  fflush(stdout);
-#endif
 
   // 基底ファイルヘッダ部読み込み
   //   m_numCalculatedLayerの情報が必要なので先に読む
@@ -320,19 +271,6 @@ CPfcRestrationRegionPod:: ExpandDataOnFile(
     PFC_PRINT( "### ERROR ### ReadBaseFile()\n" );
     return PFC::E_PFC_ERROR;
   }
-#if 0
-  DEBUG_PRINT("  -- CPfcPodFile::ReadBaseFileHeader()\n");
-  DEBUG_PRINT("       numStep_wk=%d\n",numStep_wk);
-  DEBUG_PRINT("       m_numParallel=%d\n",m_numParallel);
-  DEBUG_PRINT("       m_numCalculatedLayer=%d\n",m_numCalculatedLayer);
-  for(int i=0; i<m_numParallel; i++) {
-    DEBUG_PRINT("       m_pBaseSizes[%d]=%d\n",i,m_pBaseSizes[i]);
-  }
-  DEBUG_PRINT("       total_header_bsize=%d\n",total_header_bsize);
-  DEBUG_PRINT("       total_base_size=%d\n",total_base_size);
-  DEBUG_PRINT("       endian_chg=%d\n",endian_chg);
-  fflush(stdout);
-#endif
 
   // タイムステップ数整合性チェック
   if( numStep_wk != m_numStep ) {
@@ -379,15 +317,6 @@ CPfcRestrationRegionPod:: ExpandDataOnFile(
   
   // rowNum : 検索する経路の数
   int rowNum  = num_base/rnum;
-#if 0
-  DEBUG_PRINT("       m_numStep           =%d\n",m_numStep);
-  DEBUG_PRINT("       max_layer           =%d\n",max_layer);
-  DEBUG_PRINT("       m_numCalculatedLayer=%d\n",m_numCalculatedLayer);
-  DEBUG_PRINT("       num_base            =%d\n",num_base);
-  DEBUG_PRINT("       mlayer              =%d\n",mlayer);
-  DEBUG_PRINT("       rowNum              =%d\n",rowNum);
-  fflush(stdout);
-#endif
 
   // 経路毎の情報
   double* coef       = new double[rowNum];
@@ -534,9 +463,6 @@ CPfcRestrationRegionPod:: ExpandDataOnFile(
   delete[] ioffset_comp;
   delete[] ipos_base;
 
-#if 0
-  DEBUG_PRINT("---- CPfcRestrationRegionPod:: ExpandDataOnFile()  End\n");
-#endif
 
   return PFC::E_PFC_SUCCESS;
 }
@@ -559,11 +485,6 @@ CPfcRestrationRegionPod::GetExpandRowInfo(
         )
 {
   int* stepID_layer = new int[m_numCalculatedLayer];
-#if 0
-  DEBUG_PRINT("   GetExpandRowInfo() Start  stepID=%d rowNum=%d\n",
-                           stepID,rowNum );
-  fflush(stdout);
-#endif
 
   // 係数ツリー生成
   CPfcCoeffTree* mytree = new CPfcCoeffTree(
@@ -572,10 +493,6 @@ CPfcRestrationRegionPod::GetExpandRowInfo(
                                 );
   mytree->construct_tree(stepID);
 
-#if 0
-  DEBUG_PRINT("   GetExpandRowInfo() Loop rowNum start\n");
-  fflush(stdout);
-#endif
   // 経路の数ループ
   for(int i = 0; i < rowNum; i++){
 
@@ -587,11 +504,6 @@ CPfcRestrationRegionPod::GetExpandRowInfo(
     coef[i] = 1.0;
     for(int k = 0; k < m_numCalculatedLayer; k++) {
       int stepID_wk = stepID_layer[k];
-#if 0
-      DEBUG_PRINT("GetExpandRowInfo() i=%d  stepID_layer[%d]=%d\n",
-                         i, k, stepID_layer[k] );
-      fflush(stdout);
-#endif
       coef[i] = coef[i]*m_pIndexCoef[k][stepID_wk];
     }
 
@@ -615,10 +527,6 @@ CPfcRestrationRegionPod::GetExpandRowInfo(
     row_size[i] = m_pBaseSizes[base_index[i]];  // 経路毎のbase size->row_size
 
   }
-#if 0
-  DEBUG_PRINT("   GetExpandRowInfo() Loop rowNum end\n");
-  fflush(stdout);
-#endif
   
   row_st[0] = 0;
   for(int i = 1; i < rowNum; i++){

@@ -54,8 +54,6 @@ CPfcDivision::Read(CPfcTextParser tpCntl)
     nnode = tpCntl.countLabels(label_base);
   }
 
-  DEBUG_PRINT("CPfcDivision::Read() nnode=%d\n",nnode);
-
   for (int i=0; i<nnode; i++) {
 
     if(!tpCntl.GetNodeStr(label_base,i+1,&str))
@@ -66,15 +64,11 @@ CPfcDivision::Read(CPfcTextParser tpCntl)
     if( strcasecmp(str.substr(0,6).c_str(), "Region") ) continue;
     label_leaf=label_base+"/"+str;
 
-    DEBUG_PRINT("CPfcDivision::Read() label_leaf=%s\n",label_leaf.c_str());
-
     /** Regionの読込み */
     iret = region.Read(tpCntl, label_leaf);
     if( iret == PFC::E_PFC_SUCCESS ) {
-      DEBUG_PRINT("CPfcDivision::Read() m_regionList.push_back(region)\n");
       m_regionList.push_back(region); 
     } else {
-      DEBUG_PRINT("CPfcDivision::Read() return\n");
       return iret;
     }
 

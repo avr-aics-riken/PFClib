@@ -93,20 +93,9 @@ CPfcCompress::Init(
   PfcPerfMon::Start(t10_c);  
 #endif
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init() start\n");
-  DEBUG_PRINT("   dfiFilePath   =%s\n",dfiFilePath.c_str());
-  DEBUG_PRINT("   outDirPath    =%s\n",outDirPath.c_str());
-  DEBUG_PRINT("   compressFormat=%s\n",compressFormat.c_str());
-  DEBUG_PRINT("   compressError =%lf\n",compressError);
-  DEBUG_PRINT("   domainDivision[3]=%d %d %d\n",
-                    domainDivision[0],domainDivision[1],domainDivision[2]);
-  DEBUG_PRINT("   startStep=%d\n",startStep);
-  DEBUG_PRINT("   endStep  =%d\n",endStep);
-  DEBUG_PRINT("   optFlags =%x\n",optFlags);
-  fflush(stdout);
+#ifdef USE_PMLIB
+  PfcPerfMon::Start(t101_c);  
 #endif
-
   m_comm              = comm;
   m_dfiFilePath       = dfiFilePath;
   m_outDirPath        = outDirPath;
@@ -132,24 +121,15 @@ CPfcCompress::Init(
   // 全体ステップ数取得
   vector<int> timeStepList;
   
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init() CPfcCioDfiUtil::GetDfiTimeStepList() start\n");
-  fflush(stdout);
-#endif
 
 #ifdef USE_PMLIB
-  PfcPerfMon::Start(t101_c);  
+  PfcPerfMon::Start(t102_c);  
 #endif
   ret = CPfcCioDfiUtil::GetDfiTimeStepList( m_dfiFilePath, timeStepList );
 #ifdef USE_PMLIB
-  PfcPerfMon::Stop(t101_c);  
+  PfcPerfMon::Stop(t102_c);  
 #endif
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init() CPfcCioDfiUtil::GetDfiTimeStepList() end ret=%d\n",ret);
-  DEBUG_PRINT("         timeStepList.size() = %d\n",timeStepList.size());
-  fflush(stdout);
-#endif
   if( ret != PFC::E_PFC_SUCCESS || timeStepList.size() == 0 ) {
     PFC_PRINT("### ERROR ###\n");
     return ret;
@@ -189,10 +169,6 @@ CPfcCompress::Init(
     PFC_PRINT("### ERROR  number of steps is short.  m_numStep=%d\n",m_numStep );
     return PFC::E_PFC_ERROR;
   }
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init() m_numStep = %d\n",m_numStep);
-  fflush(stdout);
-#endif
 
   if( m_compressFormat == "pod" )
   {
@@ -221,20 +197,7 @@ CPfcCompress::Init(
     return ret;
   }
   
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("   m_dfiFilePath=%s\n",m_dfiFilePath.c_str());
-  DEBUG_PRINT("   domain.GlobalVoxel[3]=%d %d %d\n",
-                    domain.GlobalVoxel[0],domain.GlobalVoxel[1],domain.GlobalVoxel[2]);
-  DEBUG_PRINT("   domain.GlobalDivision[3]=%d %d %d\n",
-                    domain.GlobalDivision[0],domain.GlobalDivision[1],domain.GlobalDivision[2]);
-  fflush(stdout);
-#endif
-
   // CIO DFI 読み込みインスタンス
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init() cio_DFI::ReadInit() start\n");
-  fflush(stdout);
-#endif
 #ifdef USE_PMLIB
   PfcPerfMon::Start(t103_c);  
 #endif
@@ -246,10 +209,6 @@ CPfcCompress::Init(
                         ret_cio );
 #ifdef USE_PMLIB
   PfcPerfMon::Stop(t103_c);  
-#endif
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init() cio_DFI::ReadInit() end ret_cio=%d\n",ret_cio);
-  fflush(stdout);
 #endif
   if( ret_cio != CIO::E_CIO_SUCCESS || m_pDfiIN == NULL ) {
     PFC_PRINT("### ERROR  cio_DFI::ReadInit() dfiFilePath=%s\n",m_dfiFilePath.c_str() );
@@ -337,26 +296,13 @@ CPfcCompress::Init(
                   * (m_regionTail[1]-m_regionHead[1]+1)
                   * (m_regionTail[2]-m_regionHead[2]+1);
   
+#ifdef USE_PMLIB
+  PfcPerfMon::Stop(t101_c);  
+#endif
   if( m_compressFormat == "pod" )
   {
     m_pCioPod = new CPfcCompressCioPod();
     
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init(): m_pCioPod->Init()\n");
-  DEBUG_PRINT("   m_outDirPath=%s\n",m_outDirPath.c_str());
-  DEBUG_PRINT("   m_compressError=%lf\n",m_compressError);
-  DEBUG_PRINT("   m_numRegion    =%d\n", m_numRegion);
-  DEBUG_PRINT("   m_regionHead[3]=%d %d %d\n",
-                    m_regionHead[0],m_regionHead[1],m_regionHead[2]);
-  DEBUG_PRINT("   m_regionTail[3]=%d %d %d\n",
-                    m_regionTail[0],m_regionTail[1],m_regionTail[2]);
-  DEBUG_PRINT("   m_stepList.size()=%d\n",m_stepList.size());
-  for(int i=0; i<m_stepList.size(); i++ ) {
-    DEBUG_PRINT("   m_stepList[%d]=%d\n",i,m_stepList[i]);
-  }
-  DEBUG_PRINT("   m_optFlags=%x\n",m_optFlags);
-#endif
-
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t105_c);  
 #endif
@@ -384,11 +330,6 @@ CPfcCompress::Init(
     return PFC::E_PFC_ERROR_PFC_COMPRESSFORMAT;
   }
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::Init()  end\n");
-  fflush(stdout);
-#endif
-
 #ifdef USE_PMLIB
   PfcPerfMon::Stop(t10_c);  
 #endif
@@ -401,9 +342,6 @@ CPfcCompress::Init(
 PFC::E_PFC_ERRORCODE
 CPfcCompress::WriteData( void )
 {
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::WriteData() start\n");
-#endif
 #ifdef USE_PMLIB
   PfcPerfMon::Start(t30_c);
 #endif
@@ -418,10 +356,6 @@ CPfcCompress::WriteData( void )
   PfcPerfMon::Stop(t301_c);
 #endif
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::WriteData(): WriteIndexPfcFile() start\n");
-#endif
-
   // index.pfcファイル 出力
 #ifdef USE_PMLIB
   PfcPerfMon::Start(t302_c);
@@ -429,10 +363,6 @@ CPfcCompress::WriteData( void )
   WriteIndexPfcFile();
 #ifdef USE_PMLIB
   PfcPerfMon::Stop(t302_c);
-#endif
-
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompress::WriteData()  end\n");
 #endif
 
 #ifdef USE_PMLIB

@@ -62,21 +62,12 @@ CPfcCompressPod::WritePodBaseFile(
 {
   PFC::E_PFC_ERRORCODE  ret = PFC::E_PFC_SUCCESS;
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WritePodBaseFile()  Start\n");
-  fflush(stdout);
-#endif
-
   //--------------------------------------------
   //   領域内の基底データの収集
   //--------------------------------------------
   int max_size_pod_base;
 
     // 領域内のm_curPodBaseSize取得
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("   CPfcMpiCom::GetMaxInt()  Start\n");
-  fflush(stdout);
-#endif
 #ifdef USE_PMLIB
   PfcPerfMon::Start(t341_c);
 #endif
@@ -93,21 +84,11 @@ CPfcCompressPod::WritePodBaseFile(
     int nalloc_pod_base_in_region = max_size_pod_base*m_numParallel; // 余裕あり
     pPod_base_in_region  = new double[nalloc_pod_base_in_region];
   } else {
-    DEBUG_PRINT("   pPod_base_in_region is NULL setted\n");
     pPod_base_in_region = NULL;
   }
   int*    nsize_pod_base_ranks = new int[m_numParallel];
 
     // 領域内の基底データ収集
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("   CPfcMpiCom::GatherV_DataDouble()  Start\n");
-  DEBUG_PRINT("     m_regionMasterRankID=%d\n",m_regionMasterRankID);
-  DEBUG_PRINT("     m_numParallel       =%d\n",m_numParallel);
-  DEBUG_PRINT("     m_myRankID          =%d\n",m_myRankID);
-  DEBUG_PRINT("     m_curPodBaseSize    =%d\n",m_curPodBaseSize);
-  DEBUG_PRINT("     max_size_pod_base   =%d\n",max_size_pod_base);
-  fflush(stdout);
-#endif
 #ifdef USE_PMLIB
   PfcPerfMon::Start(t343_c);
 #endif
@@ -135,9 +116,6 @@ CPfcCompressPod::WritePodBaseFile(
     }
 
   //--- 基底ファイル出力 -----------
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("   CPfcPodFile::WriteBaseFile()  Start\n");
-#endif
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t345_c);
 #endif
@@ -159,32 +137,12 @@ CPfcCompressPod::WritePodBaseFile(
   }
   
   if( pPod_base_in_region != NULL  ) {
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("   delete start: pPod_base_in_region\n");
-#endif
-
     delete [] pPod_base_in_region;
-
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("   delete end  : pPod_base_in_region\n");
-#endif
   }
 
   if( nsize_pod_base_ranks != NULL ) {
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("   delete start: nsize_pod_base_ranks\n");
-#endif
-
     delete [] nsize_pod_base_ranks;
-
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("   delete start: nsize_pod_base_ranks\n");
-#endif
   }
-
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WritePodBaseFile()  End\n");
-#endif
 
   return ret;
 }
@@ -229,13 +187,6 @@ CPfcCompressPod::WritePodCoefFile(
 {
   PFC::E_PFC_ERRORCODE  ret = PFC::E_PFC_SUCCESS;
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WritePodCoefFile()  Start\n");
-  DEBUG_PRINT("      m_regionMaxStep  =%d\n",m_regionMaxStep);
-  DEBUG_PRINT("      m_calculatedLayer=%d\n",m_calculatedLayer);
-  DEBUG_PRINT("      m_numParallel    =%d\n",m_numParallel);
-#endif
-
   //--------------------------------------------
   //   係数データの収集
   //--------------------------------------------
@@ -262,12 +213,6 @@ CPfcCompressPod::WritePodCoefFile(
   //***** マスターランクIDのみファイル出力 *******
   if( m_myRankID == m_regionMasterRankID )
   {
-#ifdef DEBUG_PFC
-    for(int i=0; i<m_numParallel; i++ ) {
-      DEBUG_PRINT("    nstep_coef_ranks[%d]=%d\n\n",i,nstep_coef_ranks[i]);
-    }
-#endif
-
     //--- 係数データをレイヤ毎に並び替える ------
     int nalloc_coef_layer = m_numStep*m_calculatedLayer;
     double* pCoef_a_layer = new double[nalloc_coef_layer]; // [m_calculatedLayer][m_numStep];
@@ -321,10 +266,6 @@ CPfcCompressPod::WritePodCoefFile(
   
   delete [] pCoef_a_in_region;
   delete [] nstep_coef_ranks;
-
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressPod::WritePodCoefFile()  End\n");
-#endif
 
   return ret;
 }

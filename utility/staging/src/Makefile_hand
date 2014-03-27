@@ -23,7 +23,7 @@ CIO_LIB=-L$(CIO_DIR)/lib -lCIO
 
 TEXT_PARSER_DIR=../../../../../Library/TextParser_gnu_single
 # with mpi
-#TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lMPITP
+#TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lTPmpi
 # without mpi
 TEXT_PARSER_LIB=-L$(TEXT_PARSER_DIR)/lib -lTP
 

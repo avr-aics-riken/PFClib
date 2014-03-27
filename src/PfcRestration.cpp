@@ -51,17 +51,14 @@ CPfcRestration::Init(
   
   /** PFCのディレクトリパスの取得 */
   std::string dirPfc = PFC::PfcPath_DirName(pfcFilePath);
-  DEBUG_PRINT("index.pfc Directry Path  (%s)\n",dirPfc.c_str());
   
   /** TPインスタンス */
   CPfcTextParser tpCntl;
   tpCntl.getTPinstance();
 
-#if 1
   /** TPインスタンス CPfcTimeSlice,CPfcUnitList用 */
   cio_TextParser tpCntl_cio;
   tpCntl_cio.getTPinstance();
-#endif
   
   //-----------------------------------------
   // index.pfc関係 情報設定
@@ -74,20 +71,12 @@ CPfcRestration::Init(
   fclose(fp);
 
   /** 入力ファイル index.pfc をセット */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("tpCntl.readTPfile() Start %s\n",pfcFilePath.c_str());
-  fflush(stdout);
-#endif
   ierror = tpCntl.readTPfile(pfcFilePath);
   if ( ierror )
   {
     printf("\tinput file not found '%s'\n",pfcFilePath.c_str());
     return PFC::E_PFC_ERROR_READ_INDEXFILE_OPENERROR;
   }
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("tpCntl.readTPfile() End   %s\n",pfcFilePath.c_str());
-  fflush(stdout);
-#endif
 
 #if 1
   /** 入力ファイル index.pfc をセット */
@@ -101,8 +90,6 @@ CPfcRestration::Init(
 #endif
 
   /** Fileinfoの読込み */
-  DEBUG_PRINT("m_fileInfo.Read(tpCntl)\n");
-  fflush(stdout);
   if( m_fileInfo.Read(tpCntl) != PFC::E_PFC_SUCCESS ) 
   {
     PFC_PRINT("\tFileInfo Data Read error %s\n",pfcFilePath.c_str());
@@ -110,8 +97,6 @@ CPfcRestration::Init(
   }
 
   /** CompressInfoの読込み */
-  DEBUG_PRINT("m_compressInfo.Read(tpCntl)\n");
-  fflush(stdout);
   if( m_compressInfo.Read(tpCntl) != PFC::E_PFC_SUCCESS ) 
   {
     PFC_PRINT("\tCompressInfo Data Read error %s\n",pfcFilePath.c_str());
@@ -119,8 +104,6 @@ CPfcRestration::Init(
   }
 
   /** FilePathの読込み */
-  DEBUG_PRINT("m_filePath.Read(tpCntl)\n");
-  fflush(stdout);
   if( m_filePath.Read(tpCntl) != PFC::E_PFC_SUCCESS )
   {
     PFC_PRINT("\tFilePath Data Read error %s\n",pfcFilePath.c_str());
@@ -181,20 +164,12 @@ CPfcRestration::Init(
   fclose(fp);
 
   /** 入力ファイル proc.pfc をセット */
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("tpCntl.readTPfile(procfile) Start %s\n",procfile.c_str());
-  fflush(stdout);
-#endif
   ierror = tpCntl.readTPfile(procfile);
   if ( ierror )
   {
     PFC_PRINT("\tinput file not found '%s'\n",procfile.c_str());
     return PFC::E_PFC_ERROR_READ_PROCFILE_OPENERROR;
   }
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("tpCntl.readTPfile(procfile) End   %s\n",procfile.c_str());
-  fflush(stdout);
-#endif
 
   /** Domainの読込み */
   if( m_domain.Read(tpCntl) != PFC::E_PFC_SUCCESS ) 
@@ -219,9 +194,6 @@ CPfcRestration::Init(
   } else {
     // 相対パス：index.pfcのパスを追加
     m_fileInfo.m_dirPath = PFC::PfcPath_ConnectPath(dirPfc,m_fileInfo.m_dirPath);
-#ifdef DEBUG_PFC
-    DEBUG_PRINT("m_fileInfo.m_dirPath (%s)\n",m_fileInfo.m_dirPath.c_str());
-#endif
   }
 
 #ifdef USE_PMLIB
@@ -363,11 +335,6 @@ CPfcRestration::LoadCompressDataOnMem(
        )
 {
   PFC::E_PFC_ERRORCODE ret;
-#if DEBUG_PFC
-    DEBUG_PRINT("----- CPfcRestration::LoadCompressDataOnMem() Start ----\n");
-    DEBUG_PRINT("       head[3] = %d %d %d\n",head[0],head[1],head[2]);
-    DEBUG_PRINT("       tail[3] = %d %d %d\n",tail[0],tail[1],tail[2]);
-#endif
 
   if( m_bLoadCompressData ) {
     return PFC::E_PFC_ERROR;    // ロード済み
@@ -390,12 +357,6 @@ CPfcRestration::LoadCompressDataOnMem(
     return ret;
   }
   m_numRegion = m_regionIdList.size();
-#if DEBUG_PFC
-    DEBUG_PRINT("   m_numRegion = %d\n",m_numRegion);
-    for(int i=0; i<m_numRegion; i++ ) {
-      DEBUG_PRINT("       m_regionIdList[%d]=%d\n",i,m_regionIdList[i]);
-    }
-#endif
 
   // 対象となる領域数ループ
   for(int i=0; i<m_numRegion; i++) {
@@ -442,10 +403,6 @@ CPfcRestration::LoadCompressDataOnMem(
   
   m_head[0]=head[0]; m_head[1]=head[1]; m_head[2]=head[2];
   m_tail[0]=tail[0]; m_tail[1]=tail[1]; m_tail[2]=tail[2];
-  
-#if DEBUG_PFC
-    DEBUG_PRINT("----- CPfcRestration::LoadCompressDataOnMem() End ----\n");
-#endif
   
   return PFC::E_PFC_SUCCESS;
 }

@@ -131,20 +131,6 @@ CPfcCompressCioPod::Init(
 
   m_pFlowData  = new double[regionSize*myNumStep];
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCioPod::Init()\n");
-  DEBUG_PRINT("   m_myRankID        =%d\n",m_myRankID);
-  DEBUG_PRINT("   m_numStep         =%d\n",m_numStep);
-  DEBUG_PRINT("   regionID          =%d\n", regionID);
-  DEBUG_PRINT("   myIDinRegion      =%d\n", myIDinRegion);
-  DEBUG_PRINT("   regionMasterRankID=%d\n", regionMasterRankID);
-  DEBUG_PRINT("   myNumStep         =%d\n", myNumStep);
-  DEBUG_PRINT("   myStartStepPos    =%d\n", myStartStepPos);
-  DEBUG_PRINT("   regionMaxStep     =%d\n", regionMaxStep);
-  DEBUG_PRINT("   numComponent      =%d\n", numComponent);
-  DEBUG_PRINT("   regionSize        =%d\n", regionSize);
-#endif
-
   // CIOファイル(sph,bovファイル）Read
 #ifndef PFC_POD_USE_ORIG_ARRAYSHAPE
   //   POD圧縮データをIJKN固定として読みだす
@@ -264,31 +250,8 @@ CPfcCompressCioPod::ReadCioFile (
     double  f_time;
     double  f_dummy;
 
-#if 0
-  DEBUG_PRINT("---- CPfcCompressCioPod::ReadCioFile() \n");
-  DEBUG_PRINT("   startStep=%d\n",startStep);
-  DEBUG_PRINT("   numStep  =%d\n",numStep);
-  DEBUG_PRINT("   unit     =%d\n",unit);
-  DEBUG_PRINT("   GlobalVoxel[3]=%d %d %d\n",
-                    pCioDomain->GlobalVoxel[0],
-                    pCioDomain->GlobalVoxel[1],
-                    pCioDomain->GlobalVoxel[2]);
-  DEBUG_PRINT("   GlobalDivision[3]=%d %d %d\n",
-                    pCioDomain->GlobalDivision[0],
-                    pCioDomain->GlobalDivision[1],
-                    pCioDomain->GlobalDivision[2]);
-  DEBUG_PRINT("   m_regionHead[3]=%d %d %d\n",
-                    m_regionHead[0],m_regionHead[1],m_regionHead[2]);
-  DEBUG_PRINT("   m_regionTail[3]=%d %d %d\n",
-                    m_regionTail[0],m_regionTail[1],m_regionTail[2]);
-#endif
-
     for ( int istep =0; istep<numStep; istep++ )
     {
-#if 0
-      DEBUG_PRINT("   i=%d  step=%dt\n",i,(*m_pStepList)[startStep+i]);
-#endif
-
       ret_cio = m_pDfiIN->ReadData(
                     &pFlowData[unit*istep],
                     (*m_pStepList)[startStep+istep],
@@ -414,31 +377,8 @@ CPfcCompressCioPod::ReadCioFile_IJKN (
     double  f_dummy;
     double* fVal = new double[unit];
 
-#if 0
-  DEBUG_PRINT("---- CPfcCompressCioPod::ReadCioFile() \n");
-  DEBUG_PRINT("   startStep=%d\n",startStep);
-  DEBUG_PRINT("   numStep  =%d\n",numStep);
-  DEBUG_PRINT("   unit     =%d\n",unit);
-  DEBUG_PRINT("   GlobalVoxel[3]=%d %d %d\n",
-                    pCioDomain->GlobalVoxel[0],
-                    pCioDomain->GlobalVoxel[1],
-                    pCioDomain->GlobalVoxel[2]);
-  DEBUG_PRINT("   GlobalDivision[3]=%d %d %d\n",
-                    pCioDomain->GlobalDivision[0],
-                    pCioDomain->GlobalDivision[1],
-                    pCioDomain->GlobalDivision[2]);
-  DEBUG_PRINT("   m_regionHead[3]=%d %d %d\n",
-                    m_regionHead[0],m_regionHead[1],m_regionHead[2]);
-  DEBUG_PRINT("   m_regionTail[3]=%d %d %d\n",
-                    m_regionTail[0],m_regionTail[1],m_regionTail[2]);
-#endif
-
     for ( int istep =0; istep<numStep; istep++ )
     {
-#if 0
-      DEBUG_PRINT("   i=%d  step=%dt\n",i,(*m_pStepList)[startStep+i]);
-#endif
-
 #ifdef USE_PMLIB
       PfcPerfMon::Start(t114_c);
 #endif
@@ -487,10 +427,6 @@ CPfcCompressCioPod::ReadCioFile_IJKN (
 PFC::E_PFC_ERRORCODE
 CPfcCompressCioPod::WriteData( void )
 {
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("CPfcCompressCioPod::WriteData() Start\n");
-#endif
-
   // 圧縮＆POD(基底ファイル、係数ファイル）出力 
   //    ・index.pfcファイル 出力
   //    ・基底ファイル、係数ファイル 出力
@@ -500,10 +436,6 @@ CPfcCompressCioPod::WriteData( void )
   m_pPod->WriteData();
 #ifdef USE_PMLIB
   PfcPerfMon::Stop(t310_c);
-#endif
-
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("CPfcCompressCioPod::WriteData() End\n");
 #endif
 
   return PFC::E_PFC_SUCCESS;

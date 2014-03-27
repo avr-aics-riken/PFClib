@@ -8,24 +8,21 @@
 
 
 /**
- * @file   sample.cpp
- * @brief  performance monitor sample source
+ * @file   main.cpp
+ * @brief  compress command main関数
  * @author aics
  */
 
 #include "mpi.h"
 #include "PfcCompressCmd.h"
-// PM ヘッダ
 #include "PfcPerfMon.h"
 
 int main( int argc, char **argv )
 {
   std::string compressCntlPath = "./pfc_cntl";
   PFC::E_PFC_ERRORCODE ret;
-
-  cout << "##### Compression Command start #####"<< endl;
+  const int n_thread = 1;
 	
-  //MPI Initialize
   if( MPI_Init(&argc,&argv) != MPI_SUCCESS )
   {
       std::cerr << "MPI_Init error." << std::endl;
@@ -36,34 +33,29 @@ int main( int argc, char **argv )
   MPI_Comm_size( MPI_COMM_WORLD, &numRank );
   MPI_Comm_rank( MPI_COMM_WORLD, &rankID );
 
-  // PM 初期化
-  PfcPerfMon::InitCompress( rankID );
+  if( rankID == 0 ) {
+    cout << "##### Compression Command start #####"<< endl;
+  }
 
-  PfcPerfMon::Start(t1_c); // PM 区間測定開始
+  PfcPerfMon::InitCompress( numRank, rankID, n_thread );
 
   CPfcCompressCmd compressCmd( compressCntlPath );
 
-  PfcPerfMon::Stop(t1_c);  // PM 区間測定終了
-
-  PfcPerfMon::Start(t2_c); // PM 区間測定開始
-
   ret = compressCmd.Execute();
 
-  PfcPerfMon::Stop(t2_c);  // PM 区間測定終了
-
   if( ret == PFC::E_PFC_SUCCESS ) {
-    cout << "##### Compression Command  Normal End  #####"<< endl;
+    if( rankID == 0 ) {
+      cout << "##### Compression Command  Normal End  #####"<< endl;
+    }
   } else {
     cout << "##### Compression Command  Abormal End  #####"<< endl;
     cout << "   return code ="<<ret;
   }
 
-  // PM 終了＆ファイル出力
   PfcPerfMon::Term();
 
   MPI_Finalize();
 
   return 0;
 }
-
 

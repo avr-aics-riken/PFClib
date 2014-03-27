@@ -44,14 +44,6 @@ CPfcCompressPod::CalcPodBase(
 
 
   //-------------calculate pod_r-----------------------------------------------//
-#ifdef DEBUG_PFC
-  double sum = 0.0;
-  for(int i = 0; i < size; i++){
-    //cout<<"rank is : "<<myid<<" : eigenval "<<i<<" =  "<<eigval[i]<<endl;
-    DEBUG_PRINT("  eigenval[%d]=%e\n",i,eigval[i]);
-    sum = sum + fabs(eigval[i]);
-  }
-#endif
   //---------------------------------------------------------------------------//
   
   //-------------calculate the pod base-------------//

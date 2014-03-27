@@ -43,19 +43,7 @@ CPfcCompressCmd::Execute( void )
 {
   PFC::E_PFC_ERRORCODE ret;
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() start\n");
-
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() ReadCompressCntl() start\n");
-  fflush(stdout);
-#endif
-  
   ret = ReadCompressCntl();
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() ReadCompressCntl() end ret=%d\n",ret);
-  DEBUG_PRINT("     m_cmdList.size() = %d\n",m_cmdList.size());
-  fflush(stdout);
-#endif
   if( ret != PFC::E_PFC_SUCCESS ) {
     return ret;
   }
@@ -66,10 +54,6 @@ CPfcCompressCmd::Execute( void )
     CPfcCompress pfcCompress;   // 圧縮クラス
     
     // 圧縮クラス 初期化
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() pfcCompress.Init() start\n");
-  fflush(stdout);
-#endif
     ret = pfcCompress.Init (
                MPI_COMM_WORLD,
                m_cmdList[i].m_dfiFilePath,
@@ -81,10 +65,6 @@ CPfcCompressCmd::Execute( void )
                m_cmdList[i].m_endStep,
                m_cmdList[i].m_optFlags
             );
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() pfcCompress.Init() end ret=%d\n",ret);
-  fflush(stdout);
-#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
        PFC_PRINT("Error at pfcCompress.Init() in CPfcCompressCmd::Execute()  i=%d\n",i);
       return ret;
@@ -93,15 +73,7 @@ CPfcCompressCmd::Execute( void )
     // proc.pfcファイル出力
     if( m_cmdList[i].m_procFileSave == "ON" ) 
     {
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() pfcCompress.WriteProcFile() start\n");
-  fflush(stdout);
-#endif
       ret = pfcCompress.WriteProcFile();
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() pfcCompress.WriteProcFile() end ret=%d\n",ret);
-  fflush(stdout);
-#endif
       if( ret != PFC::E_PFC_SUCCESS ) {
         PFC_PRINT("Error at pfcCompress.WriteProcFile() in CPfcCompressCmd::Execute()  i=%d\n",i);
         return ret;
@@ -109,15 +81,7 @@ CPfcCompressCmd::Execute( void )
     }
     
     // 圧縮＆圧縮データファイル出力処理
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() pfcCompress.WriteData() start\n");
-  fflush(stdout);
-#endif
     ret = pfcCompress.WriteData();
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcCompressCmd::Execute() pfcCompress.WriteData() end ret=%d\n",ret);
-  fflush(stdout);
-#endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       PFC_PRINT("Error at pfcCompress.Execute() in CPfcCompressCmd::Execute()  i=%d\n",i);
       return ret;

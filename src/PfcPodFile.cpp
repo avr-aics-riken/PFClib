@@ -50,11 +50,6 @@ CPfcPodFile::WriteBaseFile(
     PFC_PRINT( "### ERROR ### Can't open filename=%s\n",sFilePath.c_str() );
     return PFC::E_PFC_ERROR_WRITE_PODBASE_OPENERROR;
   }
-#if DEBUG_PFC
-  else {
-    DEBUG_PRINT( " POD Base file Open filename=%s\n",sFilePath.c_str() );
-  }
-#endif
 
   int endian_check = 1;
   int data_type    = 2;
@@ -121,11 +116,6 @@ CPfcPodFile::WriteBaseFile_Debug(
     PFC_PRINT( "### ERROR ### Can't open filename=%s\n",sFilePath.c_str() );
     return PFC::E_PFC_ERROR_WRITE_PODBASE_OPENERROR;
   }
-#if DEBUG_PFC
-  else {
-    DEBUG_PRINT( " POD Base Debug file Open filename=%s\n",sFilePath.c_str() );
-  }
-#endif
 
   int endian_check = 1;
   int data_type    = 2;
@@ -211,18 +201,6 @@ CPfcPodFile::ReadBaseFile(
   if (ret != PFC::E_PFC_SUCCESS) { 
     return PFC::E_PFC_ERROR_READ_PODBASE_HEADER;
   }
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("CPfcPodFile::ReadBaseFile() ReadBaseFileHeader()\n");
-  DEBUG_PRINT("   numStep           =%d\n",numStep);
-  DEBUG_PRINT("   numParallel       =%d\n",numParallel);
-  DEBUG_PRINT("   numCalculatedLayer=%d\n",numCalculatedLayer);
-  for(int i=0; i<numParallel; i++) {
-    DEBUG_PRINT("   pSizes[%d]      =%d\n",i,pSizes[i]);
-  }
-  DEBUG_PRINT("   total_header_bsize=%d\n",total_header_bsize);
-  DEBUG_PRINT("   total_base_size   =%d\n",total_base_size);
-  DEBUG_PRINT("   endian_chg        =%d\n",endian_chg);
-#endif
   
   // 基底データ部の読み出し
   pPod_base  = new double[total_base_size];
@@ -282,11 +260,6 @@ CPfcPodFile::OpenBaseFile(
     PFC_PRINT( "### ERROR ### Can't open filename=%s\n",sFilePath.c_str() );
     return PFC::E_PFC_ERROR_READ_PODBASE_OPENERROR;
   }
-#if 0
-  else {
-    DEBUG_PRINT( " POD Base file Open filename=%s\n",sFilePath.c_str() );
-  }
-#endif
 
   return PFC::E_PFC_SUCCESS;
 }
@@ -438,11 +411,6 @@ CPfcPodFile::ReadBaseFile_Debug(
     PFC_PRINT( "### ERROR ### Can't open filename=%s\n",sFilePath.c_str() );
     return PFC::E_PFC_ERROR_READ_PODBASE_OPENERROR;
   }
-#if DEBUG_PFC
-  else {
-    DEBUG_PRINT( " POD Base Debug file Open filename=%s\n",sFilePath.c_str() );
-  }
-#endif
 
   // ヘッダ部読み込み処理
   bool endian_chg;
@@ -527,11 +495,6 @@ CPfcPodFile::WriteCoefFile(
     PFC_PRINT( "### ERROR ### Can't open filename=%s\n",sFilePath.c_str() );
     return PFC::E_PFC_ERROR_WRITE_PODCOEF_OPENERROR;
   }
-#if DEBUG_PFC
-  else {
-    DEBUG_PRINT( " POD Coef file Open filename=%s\n",sFilePath.c_str() );
-  }
-#endif
 
   int endian_check = 1;
   int data_type    = 2;
@@ -604,11 +567,6 @@ CPfcPodFile::ReadCoefFile(
     PFC_PRINT( "### ERROR ### Can't open filename=%s\n",sFilePath.c_str() );
     return PFC::E_PFC_ERROR_READ_PODCOEF_OPENERROR;
   }
-#if 0
-  else {
-    DEBUG_PRINT( " POD Coef file Open filename=%s\n",sFilePath.c_str() );
-  }
-#endif
 
   int  endian_check_compare = 1;
   int  endian_check;

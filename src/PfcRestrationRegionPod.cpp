@@ -70,13 +70,6 @@ CPfcRestrationRegionPod::Init(
   m_numStep      = numStep;        // タイムステップ数
   m_bSingle      = bSingle;        // 単一領域フラグ
 
-#ifdef DEBUG_PFC
-  if( arrayShape == PFC::E_PFC_NIJK ) {
-    DEBUG_PRINT( "WARNING:: CPfcRestrationRegionPod::Init() arrayShape NIJK\n"); 
-  } else {
-    DEBUG_PRINT( "CPfcRestrationRegionPod::Init() arrayShape IJKN\n"); 
-  }
-#endif
 
   return PFC::E_PFC_SUCCESS;
 }
@@ -87,21 +80,12 @@ CPfcRestrationRegionPod::Init(
 PFC::E_PFC_ERRORCODE
 CPfcRestrationRegionPod::LoadCompressDataOnMem( void )
 {
-//#ifdef DEBUG_PFC
-#if 0
-  DEBUG_PRINT("---- CPfcRestrationRegionPod::LoadCompressDataOnMem() Start\n");
-  fflush(stdout);
-#endif
   PFC::E_PFC_ERRORCODE ret;
   int numStep_wk, numCalculatedLayer_wk;
 
   //------------------------------------------
   // 基底データ読み込み
   //------------------------------------------
-#if 0
-  DEBUG_PRINT("   CPfcPodFile::ReadBaseFile() Start\n");
-  fflush(stdout);
-#endif
   ret = CPfcPodFile::ReadBaseFile(
                         m_dirPath,              // (in)  フィールドデータのディレクトリ
                         m_prefix,               // (in)  属性名
@@ -121,10 +105,6 @@ CPfcRestrationRegionPod::LoadCompressDataOnMem( void )
                                                 //          ポインタの参照型であることに注意
                                                 //          使用後, delete [] pIndex 必要
             );
-#if 0
-  DEBUG_PRINT("   CPfcPodFile::ReadBaseFile() End  ret=%d\n",ret);
-  fflush(stdout);
-#endif
   if ( ret != PFC::E_PFC_SUCCESS ) { 
     PFC_PRINT( "### ERROR ### ReadBaseFile()\n" );
     return PFC::E_PFC_ERROR;
@@ -142,10 +122,6 @@ CPfcRestrationRegionPod::LoadCompressDataOnMem( void )
   //------------------------------------------
 
   
-#if 0
-  DEBUG_PRINT("   CPfcPodFile::ReadCoefFile() Start\n");
-  fflush(stdout);
-#endif
   ret = CPfcPodFile::ReadCoefFile(
                 m_dirPath,              // (in)  フィールドデータのディレクトリ
                 m_prefix,               // (in)  属性名
@@ -165,10 +141,6 @@ CPfcRestrationRegionPod::LoadCompressDataOnMem( void )
                                         //          使用後, delete [] pIndexCoef 必要
 
             );
-#if 0
-  DEBUG_PRINT("   CPfcPodFile::ReadCoefFile() End ret=%d\n",ret);
-  fflush(stdout);
-#endif
   if ( ret != PFC::E_PFC_SUCCESS ) { 
     PFC_PRINT( "### ERROR ### ReadCoefFile()\n" );
     return PFC::E_PFC_ERROR;
@@ -189,12 +161,6 @@ CPfcRestrationRegionPod::LoadCompressDataOnMem( void )
   // 圧縮データのメモリロードフラグ
   m_bLoadCompressData = true;
 
-//#ifdef DEBUG_PFC
-#if 0
-  DEBUG_PRINT("---- CPfcRestrationRegionPod::LoadCompressDataOnMem() End\n");
-  fflush(stdout);
-#endif
-
   return PFC::E_PFC_SUCCESS;
 }
 
@@ -203,10 +169,6 @@ CPfcRestrationRegionPod::LoadCompressDataOnMem( void )
 void
 CPfcRestrationRegionPod::DeleteCompressDataOnMem( void )
 {
-#if 0
-  DEBUG_PRINT("CPfcRestrationRegionPod::DeleteCompressDataOnMem() Start\n");
-  fflush(stdout);
-#endif
 
   if( m_pIndexBase != NULL ) {
     delete [] m_pIndexBase; m_pIndexBase = NULL;
@@ -226,10 +188,6 @@ CPfcRestrationRegionPod::DeleteCompressDataOnMem( void )
 
   // 圧縮データのメモリロードフラグ
   m_bLoadCompressData = false;
-#if 0
-  DEBUG_PRINT("CPfcRestrationRegionPod::DeleteCompressDataOnMem() End\n");
-  fflush(stdout);
-#endif
 }
 
 
@@ -302,30 +260,18 @@ CPfcRestrationRegionPod::ReadFieldData (
               const int stepID      // [in]  ステップID (起点0)
            )
 {
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcRestrationRegionPod::ReadFieldData() Start\n");
-  fflush(stdout);
-#endif
 
   PFC::E_PFC_ERRORCODE ret;
   bool bNewLoad = false;
 
   // 圧縮データのメモリロード（分割領域の全データロード）
   if( !m_bLoadCompressData ) {
-#if 0
-    DEBUG_PRINT("   LoadCompressDataOnMem() Start\n");
-    fflush(stdout);
-#endif
 #ifdef USE_PMLIB
     PfcPerfMon::Start(t261_r);
 #endif
     ret = LoadCompressDataOnMem();
 #ifdef USE_PMLIB
     PfcPerfMon::Stop(t261_r);
-#endif
-#if 0
-    DEBUG_PRINT("   LoadCompressDataOnMem() End ret=%d\n",ret);
-    fflush(stdout);
 #endif
     if( ret != PFC::E_PFC_SUCCESS ) {
       PFC_PRINT("Error LoadCompressDataOnMem\n");
@@ -336,10 +282,6 @@ CPfcRestrationRegionPod::ReadFieldData (
   }
   
   // 展開処理
-#if 0
-    DEBUG_PRINT("   ExpandData() Start\n");
-    fflush(stdout);
-#endif
 #ifdef USE_PMLIB
   PfcPerfMon::Start(t263_r);
 #endif
@@ -349,10 +291,6 @@ CPfcRestrationRegionPod::ReadFieldData (
 #ifdef USE_PMLIB
   PfcPerfMon::Stop(t263_r);
 #endif
-#if 0
-    DEBUG_PRINT("   ExpandData() End ret=%d\n",ret);
-    fflush(stdout);
-#endif
   if( ret != PFC::E_PFC_SUCCESS ) {
     PFC_PRINT("Error Expand\n");
     return ret;
@@ -360,21 +298,9 @@ CPfcRestrationRegionPod::ReadFieldData (
 
   // 新規に圧縮した場合、圧縮データ 削除
   if( bNewLoad ) {
-#if 0
-    DEBUG_PRINT("   DeleteCompressDataOnMem() Start\n");
-    fflush(stdout);
-#endif
     DeleteCompressDataOnMem();
-#if 0
-    DEBUG_PRINT("   DeleteCompressDataOnMem() End\n");
-    fflush(stdout);
-#endif
   }
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcRestrationRegionPod::ReadFieldData() End\n");
-  fflush(stdout);
-#endif
 
   return PFC::E_PFC_SUCCESS;
 }

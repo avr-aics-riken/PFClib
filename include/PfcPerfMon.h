@@ -24,15 +24,16 @@ using namespace pm_lib;
 //圧縮用タイマーキー
 enum timing_key_compress {
     // t1_c - t5_c : ユーザ使用可能key
-    t1_c,
-    t2_c,
-    t3_c,
-    t4_c,
-    t5_c,
+    //t1_c,
+    //t2_c,
+    //t3_c,
+    //t4_c,
+    //t5_c,
 
     // プログラム内部のkey : ユーザ使用不可
     t10_c,
     t101_c,
+    t102_c,
     t103_c,
     t105_c,
     t110_c,
@@ -64,11 +65,11 @@ enum timing_key_compress {
 //展開用タイマーキー
 enum timing_key_restore {
     // t1_r - t5_r : ユーザ使用可能key
-    t1_r,
-    t2_r,
-    t3_r,
-    t4_r,
-    t5_r,
+    //t1_r,
+    //t2_r,
+    //t3_r,
+    //t4_r,
+    //t5_r,
 
     // プログラム内部のkey : ユーザ使用不可
     t10_r,
@@ -100,11 +101,11 @@ public:
 
   // 初期化（圧縮用）
   static void
-  InitCompress( int rankID );
+  InitCompress( const int n_proc, const int rankID, const int n_thread );
 
   // 初期化（展開用）
   static void
-  InitRestore( int rankID );
+  InitRestore( const int n_proc, const int rankID, const int n_thread );
 
   // 終了化（Peformance Monitor結果出力）
   static void

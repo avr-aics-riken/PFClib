@@ -108,10 +108,6 @@ CPfcRestrationRegion::Init(
 PFC::E_PFC_ERRORCODE
 CPfcRestrationRegion::LoadCompressDataOnMem( void )
 {
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcRestrationRegion::LoadCompressDataOnMem() Start\n");
-  fflush(stdout);
-#endif
   PFC::E_PFC_ERRORCODE ret;
   
   if( m_compressForm == PFC::E_PFC_COMPRESS_FMT_POD )
@@ -137,10 +133,6 @@ CPfcRestrationRegion::LoadCompressDataOnMem( void )
   // 圧縮データのメモリロードフラグ
   m_bLoadCompressData = true;
 
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcRestrationRegion::LoadCompressDataOnMem() End\n");
-  fflush(stdout);
-#endif
   return PFC::E_PFC_SUCCESS;
 }
 

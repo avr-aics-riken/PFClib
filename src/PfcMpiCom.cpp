@@ -81,24 +81,12 @@ CPfcMpiCom::GatherDataInt(
                 int*      gatherData          // (out) 収集データ（マスターランクのみ設定）
        )
 {
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcMpiCom::GatherDataInt() Start\n");
-  DEBUG_PRINT("     masterRankID=%d\n",masterRankID);
-  DEBUG_PRINT("     numRank     =%d\n",numRank);
-  DEBUG_PRINT("     myRankID    =%d\n",myRankID);
-  DEBUG_PRINT("     nSize       =%d\n",nSize);
-#endif
-
   int msgTag = 3001;
   MPI_Status status;
  
   // マスターランクでない場合、マスターランクに送信
   if( myRankID != masterRankID )
   {
-#ifdef DEBUG_PFC
-      DEBUG_PRINT("   MPI_Send() from Rank%d to Rank%d localData[0]=%d\n",
-                                      myRankID,masterRankID,nSize,localData[0]);
-#endif
       MPI_Send( localData, nSize, 
                 MPI_INT, masterRankID, 
                 msgTag, comm);
@@ -117,16 +105,9 @@ CPfcMpiCom::GatherDataInt(
                 MPI_INT, (masterRankID+i), 
                 msgTag, comm, &status );
 
-#ifdef DEBUG_PFC
-      DEBUG_PRINT("   MPI_Recv() from Rank%d to Rank%d gatherData[%d]=%d\n",
-                         (masterRankID+i),myRankID,(nSize*i),gatherData[nSize*i]);
-#endif
     }
 
   }
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcMpiCom::GatherDataInt() End\n");
-#endif
 
   return PFC::E_PFC_SUCCESS;
 }
@@ -151,20 +132,6 @@ CPfcMpiCom::GatherV_DataDouble(
                 int*      nSizeRanks          // (out) 各ランクのサイズ（マスターランクのみ設定）
        )
 {
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcMpiCom::GatherV_DataDouble() Start\n");
-  DEBUG_PRINT("     masterRankID=%d\n",masterRankID);
-  DEBUG_PRINT("     numRank     =%d\n",numRank);
-  DEBUG_PRINT("     myRankID    =%d\n",myRankID);
-  DEBUG_PRINT("     nSize       =%d\n",nSize);
-  if( localData == NULL ) {
-    DEBUG_PRINT("     localData is NULL\n");
-  }
-  if( gatherData == NULL ) {
-    DEBUG_PRINT("     gatherData is NULL\n");
-  }
-#endif
-
   int msgTag = 3002;
   MPI_Status status;
 
@@ -180,22 +147,10 @@ CPfcMpiCom::GatherV_DataDouble(
                 &nSize_wk,          // (in)  ローカルデータ
                 nSizeRanks          // (out) 各ランクのサイズ
               );
-#ifdef DEBUG_PFC
-  if( myRankID == masterRankID ) {
-    DEBUG_PRINT("   --- GatherDataInt() End\n");
-    for(int i = 0; i < numRank; i++) {
-      DEBUG_PRINT("   nSizeRanks[%d]=%d\n",i,nSizeRanks[i]);
-    }
-  }
-#endif
   
   // マスターランクでない場合、マスターランクに送信
   if( myRankID != masterRankID )
   {
-#ifdef DEBUG_PFC
-      DEBUG_PRINT("   MPI_Send() from Rank%d to Rank%d size:%d\n",
-                                      myRankID,masterRankID,nSize_wk);
-#endif
     MPI_Send( localData, nSize, 
               MPI_DOUBLE, masterRankID, 
               msgTag, comm);
@@ -217,17 +172,9 @@ CPfcMpiCom::GatherV_DataDouble(
                 MPI_DOUBLE, (masterRankID+i), 
                 msgTag, comm, &status );
 
-#ifdef DEBUG_PFC
-      DEBUG_PRINT("   MPI_Recv() from Rank%d to Rank%d size:%d\n",
-                         (masterRankID+i),myRankID,nSizeRanks[i]);
-#endif
     }
 
   }
-
-#ifdef DEBUG_PFC
-  DEBUG_PRINT("---- CPfcMpiCom::GatherV_DataDouble() End\n");
-#endif
 
   return PFC::E_PFC_SUCCESS;
 }

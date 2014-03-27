@@ -90,8 +90,6 @@ CPfcCompressPod::SwapBinaryData(
   MPI_Status  status[2];
   int msgTag = 2000;
   
-  PFC_PRINT(" Test SwapBinaryData() Communication start\n" );
-      
   // send
   MPI_Isend( &pPod_base_r[ist_send],
                     nsize_send,  MPI_DOUBLE,
@@ -107,8 +105,6 @@ CPfcCompressPod::SwapBinaryData(
     
   // mpiwaitall
   MPI_Waitall( 2, req, status );
-
-  PFC_PRINT(" Test SwapBinaryData() Communication  end\n" );
 
   return PFC::E_PFC_SUCCESS;
 }

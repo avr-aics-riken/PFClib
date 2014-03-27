@@ -38,7 +38,12 @@ CPfcCompress::WriteProcFile( void )
   
 
   // ランク０のみファイル出力
-  if( m_myRankID != 0 ) return PFC::E_PFC_SUCCESS;
+  if( m_myRankID != 0 ) {
+#ifdef USE_PMLIB
+    PfcPerfMon::Stop(t20_c);
+#endif
+    return PFC::E_PFC_SUCCESS;
+  }
 
   // procファイル名の生成
   //std::string procFileName = CIO::cioPath_DirName(m_indexDfiName)+"/"+CIO::cioPath_FileName(DFI_Fpath.ProcDFIFile,".dfi");
@@ -62,12 +67,6 @@ CPfcCompress::WriteProcFile( void )
     PFC_PRINT("Can't open file.(%s)\n", filename.c_str());
     return PFC::E_PFC_ERROR_WRITE_PROCFILE_OPENERROR;
   }
-#ifdef DEBUG_PFC
-  else
-  {
-    DEBUG_PRINT("*** Open file.(%s)\n", filename.c_str());
-  }
-#endif
 
   //Domain {} の出力
   const cio_Domain* pCioDomain = m_pDfiIN->GetcioDomain(); 
@@ -112,7 +111,6 @@ CPfcCompress::WriteProcFile( void )
 #ifdef USE_PMLIB
   PfcPerfMon::Stop(t20_c);
 #endif
-
 
   return PFC::E_PFC_SUCCESS;
 }

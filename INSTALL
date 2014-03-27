@@ -13,7 +13,6 @@ SOFTWARE REQUIREMENT
 - MPI library
 - Blas library
 - Text parsing library
-- CPM library
 - CIO library
 
 
